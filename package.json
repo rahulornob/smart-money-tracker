@@ -1,0 +1,32 @@
+{
+  "name": "smart-money-tracker",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "ui:audit": "uisentinel check-accessibility -u http://localhost:5173/",
+    "ui:contrast": "uisentinel check-contrast -u http://localhost:5173/",
+    "ui:responsive": "uisentinel analyze-responsive -u http://localhost:5173/ -v mobile",
+    "ui:mobile-ux": "uisentinel analyze-mobile-ux -u http://localhost:5173/",
+    "ui:capture": "uisentinel fullpage-multi -u http://localhost:5173/ -d desktop,tablet,mobile",
+    "ds:lint": "node scripts/lint_design_system.mjs"
+  },
+  "dependencies": {
+    "@tabler/icons-react": "^3.46.0",
+    "canvas-confetti": "^1.9.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "uisentinel": "^0.2.0-alpha.2",
+    "vite": "^8.3.0"
+  }
+}

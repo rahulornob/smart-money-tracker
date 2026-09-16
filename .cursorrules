@@ -1,0 +1,18 @@
+# Design & Animation System Rules for Cursor
+
+Read and strictly adhere to DESIGN_SYSTEM.md:
+
+1. ZERO STROKES / ZERO BORDERS:
+   - Never add `border: 1px solid...` or outline to any card, tile, metric box, or modal.
+   - Use `border: none !important;`. Contrast is achieved via the dark surface hierarchy (#08080C, #13141A, #1C1D26, #232432).
+
+2. ZERO BOX SHADOWS:
+   - Never add `box-shadow` or neon glow to cards, tiles, or modals. Use `box-shadow: none !important;`.
+
+3. SMOOTH ANIMATION & MANDATORY EXIT TRANSITIONS:
+   - Never instantly unmount modals, dropdowns, or drawers on close.
+   - Always use `useModalAnimation` (from src/hooks/useModalAnimation.js) or `<Modal />` with is-closing exit class.
+   - Transitions must use fluid cubic-bezier curves (e.g. cubic-bezier(0.2, 0.8, 0.2, 1)).
+
+4. VERIFICATION:
+   - Run `npm run build` and `npm run ui:audit` to verify 0 errors and 0 WCAG accessibility violations.
