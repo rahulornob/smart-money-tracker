@@ -30,7 +30,7 @@ export default function NetWorthHero({
   const getAccountTypeLabel = (type) => {
     switch (type) {
       case 'bank':
-        return 'Checking';
+        return 'Bank Account';
       case 'cash':
         return 'Cash Wallet';
       case 'savings':
@@ -118,7 +118,7 @@ export default function NetWorthHero({
                   <IconPlus size={22} stroke={2} />
                 </div>
                 <span className="add-slot-title">Add Your First Card or Account</span>
-                <span className="add-slot-desc">Connect checking, cash wallet, or credit card</span>
+                <span className="add-slot-desc">Connect bank account, cash wallet, or credit card</span>
               </div>
             </div>
           </div>

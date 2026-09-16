@@ -20,7 +20,7 @@ export default function Header({ activeTab, onOpenTransactionModal }) {
       case 'transactions':
         return { title: 'Transactions Ledger', sub: 'Categorized spending, income & history' };
       case 'accounts':
-        return { title: 'Accounts & Cards', sub: 'Manage checking, cash, savings & credit lines' };
+        return { title: 'Accounts & Cards', sub: 'Manage bank, cash, savings & credit lines' };
       case 'budgets':
         return { title: 'Budgets & Limits', sub: 'Monthly spending caps & category control' };
       case 'planned':

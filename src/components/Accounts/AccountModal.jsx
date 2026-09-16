@@ -111,7 +111,7 @@ export default function AccountModal({ isOpen, onClose, editAccount = null }) {
             <label>Account Name</label>
             <input
               type="text"
-              placeholder="e.g. Chase Main Checking, Cash Pocket, Apple Card"
+              placeholder="e.g. City Bank, Standard Chartered, Cash Pocket"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -127,7 +127,7 @@ export default function AccountModal({ isOpen, onClose, editAccount = null }) {
                 onChange={(e) => setType(e.target.value)}
                 className="modal-select"
               >
-                <option value="bank">Bank Checking Account</option>
+                <option value="bank">Bank Account</option>
                 <option value="cash">Cash Wallet</option>
                 <option value="savings">Savings Vault</option>
                 <option value="credit">Credit Card</option>

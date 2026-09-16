@@ -216,7 +216,7 @@ export default function TransactionModal({
                 className="btn btn-primary"
                 onClick={() => {
                   const created = addAccount({
-                    name: 'Primary Checking',
+                    name: 'Primary Bank Account',
                     type: 'bank',
                     initialBalance: 0,
                     accountNumber: 'Primary',
@@ -230,7 +230,7 @@ export default function TransactionModal({
                 }}
               >
                 <IconPlus size={15} stroke={2} />
-                <span>+ Primary Checking ($0.00)</span>
+                <span>+ Primary Bank Account ($0.00)</span>
               </button>
               <button
                 type="button"

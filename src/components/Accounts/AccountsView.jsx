@@ -41,7 +41,7 @@ export default function AccountsView({ onOpenTransfer }) {
   const getAccountTypeLabel = (type) => {
     switch (type) {
       case 'bank':
-        return 'Checking / Bank';
+        return 'Bank Account';
       case 'cash':
         return 'Physical Cash';
       case 'savings':
@@ -98,7 +98,7 @@ export default function AccountsView({ onOpenTransfer }) {
             </div>
             <h3 className="empty-page-title">No Financial Accounts Added</h3>
             <p className="empty-page-sub">
-              Create your primary bank checking account, physical cash wallet, savings vault, or credit cards to begin tracking real balances.
+              Create your primary bank account, physical cash wallet, savings vault, or credit cards to begin tracking real balances.
             </p>
             <button
               onClick={() => {
