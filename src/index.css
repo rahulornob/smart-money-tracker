@@ -787,7 +787,7 @@ input:focus, select:focus, textarea:focus {
 
 .net-worth-hero {
   padding: 20px 22px;
-  background: var(--bg-surface);
+  background: var(--bg-card);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: none !important;
