@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { IconChartLine } from '@tabler/icons-react';
 import { useFinance } from '../../context/FinanceContext';
 
 export default function CashFlowChart() {
@@ -18,7 +19,7 @@ export default function CashFlowChart() {
         const dateStr = d.toISOString().slice(0, 10);
         const label = d.toLocaleDateString('en-US', { weekday: 'short', month: 'numeric', day: 'numeric' });
 
-        const dayTxs = transactions.filter((t) => t.date.slice(0, 10) === dateStr);
+        const dayTxs = transactions.filter((t) => t.date && t.date.slice(0, 10) === dateStr);
         const income = dayTxs.filter((t) => t.type === 'income').reduce((s, t) => s + Number(t.amount), 0);
         const expense = dayTxs.filter((t) => t.type === 'expense').reduce((s, t) => s + Number(t.amount), 0);
 
@@ -35,6 +36,7 @@ export default function CashFlowChart() {
         const label = `${dStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${dEnd.getDate()}`;
 
         const periodTxs = transactions.filter((t) => {
+          if (!t.date) return false;
           const tDate = new Date(t.date);
           return tDate >= dStart && tDate <= dEnd;
         });
@@ -53,6 +55,7 @@ export default function CashFlowChart() {
         const label = d.toLocaleDateString('en-US', { month: 'short' });
 
         const monthTxs = transactions.filter((t) => {
+          if (!t.date) return false;
           const tDate = new Date(t.date);
           return tDate.getMonth() === m && tDate.getFullYear() === y;
         });
@@ -66,47 +69,52 @@ export default function CashFlowChart() {
     return points;
   }, [transactions, period]);
 
-  const maxVal = Math.max(
-    ...chartData.map((d) => Math.max(d.income, d.expense)),
-    100
-  );
-
   const totalPeriodIncome = chartData.reduce((s, d) => s + d.income, 0);
   const totalPeriodExpense = chartData.reduce((s, d) => s + d.expense, 0);
   const netPeriodCashflow = totalPeriodIncome - totalPeriodExpense;
+  const hasData = totalPeriodIncome > 0 || totalPeriodExpense > 0;
 
-  // SVG Chart Geometry
-  const width = 600;
-  const height = 220;
-  const paddingX = 40;
-  const paddingY = 30;
-  const chartWidth = width - paddingX * 2;
-  const chartHeight = height - paddingY * 2;
+  const rawMax = Math.max(...chartData.map((d) => Math.max(d.income, d.expense)), 0);
+  const maxVal = rawMax > 0 ? rawMax * 1.15 : 100;
 
-  const getX = (index) => paddingX + (index / (chartData.length - 1 || 1)) * chartWidth;
-  const getY = (val) => height - paddingY - (val / (maxVal * 1.15)) * chartHeight;
+  // SVG Chart Geometry with calibrated dimensions
+  const width = 800;
+  const height = 230;
+  const paddingLeft = 52;
+  const paddingRight = 24;
+  const paddingTop = 26;
+  const paddingBottom = 42;
+  const chartWidth = width - paddingLeft - paddingRight;
+  const chartHeight = height - paddingTop - paddingBottom;
 
-  // Generate SVG path strings for smooth Bezier curve
+  const getX = (index) => paddingLeft + (index / (chartData.length - 1 || 1)) * chartWidth;
+  const getY = (val) => height - paddingBottom - (val / maxVal) * chartHeight;
+
+  // Generate smooth cubic Bezier curve with natural tension
   const createSmoothPath = (key) => {
     if (chartData.length === 0) return '';
     const points = chartData.map((d, i) => ({ x: getX(i), y: getY(d[key]) }));
+    if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
 
     let path = `M ${points[0].x} ${points[0].y}`;
     for (let i = 0; i < points.length - 1; i++) {
       const p0 = points[i];
       const p1 = points[i + 1];
-      const cpX = (p0.x + p1.x) / 2;
-      path += ` C ${cpX} ${p0.y}, ${cpX} ${p1.y}, ${p1.x} ${p1.y}`;
+      const dx = (p1.x - p0.x) * 0.45;
+      path += ` C ${p0.x + dx} ${p0.y}, ${p1.x - dx} ${p1.y}, ${p1.x} ${p1.y}`;
     }
     return path;
   };
 
-  const incomePath = createSmoothPath('income');
-  const expensePath = createSmoothPath('expense');
+  const incomePath = hasData && totalPeriodIncome > 0 ? createSmoothPath('income') : '';
+  const expensePath = hasData && totalPeriodExpense > 0 ? createSmoothPath('expense') : '';
 
-  // Closed area paths for gradient fills
-  const incomeArea = `${incomePath} L ${getX(chartData.length - 1)} ${height - paddingY} L ${getX(0)} ${height - paddingY} Z`;
-  const expenseArea = `${expensePath} L ${getX(chartData.length - 1)} ${height - paddingY} L ${getX(0)} ${height - paddingY} Z`;
+  const incomeArea = incomePath
+    ? `${incomePath} L ${getX(chartData.length - 1)} ${height - paddingBottom} L ${getX(0)} ${height - paddingBottom} Z`
+    : '';
+  const expenseArea = expensePath
+    ? `${expensePath} L ${getX(chartData.length - 1)} ${height - paddingBottom} L ${getX(0)} ${height - paddingBottom} Z`
+    : '';
 
   return (
     <div className="cashflow-card glass-panel">
@@ -139,7 +147,7 @@ export default function CashFlowChart() {
         </div>
       </div>
 
-      {/* Summary Row */}
+      {/* Summary Metrics Bar */}
       <div className="cashflow-summary-row">
         <div className="cf-summary-item">
           <span className="cf-dot income-dot"></span>
@@ -159,139 +167,189 @@ export default function CashFlowChart() {
         </div>
       </div>
 
-      {/* SVG Chart Container */}
+      {/* Chart Canvas */}
       <div className="chart-svg-wrapper">
         <svg viewBox={`0 0 ${width} ${height}`} className="cashflow-svg" preserveAspectRatio="none">
           <defs>
-            {/* Income Gradient */}
-            <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+            {/* Soft Phantom Mint Area Gradient */}
+            <linearGradient id="phantomMintGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#30E0A1" stopOpacity="0.24" />
+              <stop offset="90%" stopColor="#30E0A1" stopOpacity="0.0" />
             </linearGradient>
-            {/* Expense Gradient */}
-            <linearGradient id="expenseGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="#f43f5e" stopOpacity="0.0" />
+            {/* Soft Phantom Coral Area Gradient */}
+            <linearGradient id="phantomCoralGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#FF5C5C" stopOpacity="0.18" />
+              <stop offset="90%" stopColor="#FF5C5C" stopOpacity="0.0" />
             </linearGradient>
           </defs>
 
-          {/* Grid lines */}
-          {[0.25, 0.5, 0.75, 1].map((ratio) => {
-            const y = height - paddingY - ratio * chartHeight;
+          {/* Horizontal Reference Grid Guidelines */}
+          {[1, 0.5, 0].map((ratio) => {
+            const y = paddingTop + (1 - ratio) * chartHeight;
+            const gridVal = rawMax > 0 ? ratio * rawMax : 0;
             return (
-              <line
-                key={ratio}
-                x1={paddingX}
-                y1={y}
-                x2={width - paddingX}
-                y2={y}
-                stroke="rgba(255, 255, 255, 0.06)"
-                strokeDasharray="4 4"
-              />
-            );
-          })}
-
-          {/* Area Fills */}
-          <path d={incomeArea} fill="url(#incomeGradient)" />
-          <path d={expenseArea} fill="url(#expenseGradient)" />
-
-          {/* Line Strokes */}
-          <path d={incomePath} fill="none" stroke="#10b981" strokeWidth="3" strokeLinecap="round" />
-          <path d={expensePath} fill="none" stroke="#f43f5e" strokeWidth="2.5" strokeLinecap="round" />
-
-          {/* Interactive Data Dots */}
-          {chartData.map((d, i) => {
-            const x = getX(i);
-            const yInc = getY(d.income);
-            const yExp = getY(d.expense);
-            const isHovered = hoveredIndex === i;
-
-            return (
-              <g key={i} onMouseEnter={() => setHoveredIndex(i)} onMouseLeave={() => setHoveredIndex(null)}>
-                {/* Vertical hover guide */}
-                {isHovered && (
-                  <line
-                    x1={x}
-                    y1={paddingY}
-                    x2={x}
-                    y2={height - paddingY}
-                    stroke="rgba(255, 255, 255, 0.2)"
-                    strokeDasharray="3 3"
-                  />
-                )}
-
-                {/* Income point */}
-                <circle
-                  cx={x}
-                  cy={yInc}
-                  r={isHovered ? 6 : 4}
-                  fill="#10b981"
-                  stroke="#0a0e17"
-                  strokeWidth="2"
-                  className="chart-point"
+              <g key={ratio} className="chart-grid-group">
+                <line
+                  x1={paddingLeft}
+                  y1={y}
+                  x2={width - paddingRight}
+                  y2={y}
+                  stroke="var(--border-color)"
+                  strokeDasharray={ratio === 0 ? 'none' : '4 6'}
+                  strokeWidth={ratio === 0 ? '1' : '0.8'}
+                  opacity={ratio === 0 ? '0.4' : '0.2'}
                 />
-
-                {/* Expense point */}
-                <circle
-                  cx={x}
-                  cy={yExp}
-                  r={isHovered ? 6 : 4}
-                  fill="#f43f5e"
-                  stroke="#0a0e17"
-                  strokeWidth="2"
-                  className="chart-point"
-                />
-
-                {/* Invisible hit target */}
-                <rect
-                  x={x - 25}
-                  y={0}
-                  width={50}
-                  height={height}
-                  fill="transparent"
-                  style={{ cursor: 'pointer' }}
-                />
+                <text
+                  x={paddingLeft - 10}
+                  y={y + 3.5}
+                  textAnchor="end"
+                  fill="var(--text-muted)"
+                  fontSize="9.5"
+                  fontFamily="inherit"
+                  opacity="0.65"
+                >
+                  {formatCurrency(gridVal, { maximumFractionDigits: 0 })}
+                </text>
               </g>
             );
           })}
+
+          {/* Render Area Fills */}
+          {incomeArea && <path d={incomeArea} fill="url(#phantomMintGradient)" />}
+          {expenseArea && <path d={expenseArea} fill="url(#phantomCoralGradient)" />}
+
+          {/* Smooth Fluid Line Curves (Zero clunky static dots) */}
+          {incomePath && (
+            <path
+              d={incomePath}
+              fill="none"
+              stroke="#30E0A1"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          )}
+          {expensePath && (
+            <path
+              d={expensePath}
+              fill="none"
+              stroke="#FF5C5C"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          )}
+
+          {/* Interactive Scrubbing Cursor & Dynamic Dots */}
+          {hasData &&
+            chartData.map((d, i) => {
+              const x = getX(i);
+              const yInc = getY(d.income);
+              const yExp = getY(d.expense);
+              const isHovered = hoveredIndex === i;
+
+              return (
+                <g key={i} onMouseEnter={() => setHoveredIndex(i)} onMouseLeave={() => setHoveredIndex(null)}>
+                  {/* Vertical cursor guide */}
+                  {isHovered && (
+                    <line
+                      x1={x}
+                      y1={paddingTop}
+                      x2={x}
+                      y2={height - paddingBottom}
+                      stroke="var(--phantom-purple)"
+                      strokeWidth="1.2"
+                      strokeDasharray="3 3"
+                      opacity="0.6"
+                    />
+                  )}
+
+                  {/* Active Indicator Point on Hover (Mint Inflow) */}
+                  {isHovered && d.income > 0 && (
+                    <circle
+                      cx={x}
+                      cy={yInc}
+                      r="5"
+                      fill="#30E0A1"
+                      stroke="#08080C"
+                      strokeWidth="2.5"
+                    />
+                  )}
+
+                  {/* Active Indicator Point on Hover (Coral Outflow) */}
+                  {isHovered && d.expense > 0 && (
+                    <circle
+                      cx={x}
+                      cy={yExp}
+                      r="5"
+                      fill="#FF5C5C"
+                      stroke="#08080C"
+                      strokeWidth="2.5"
+                    />
+                  )}
+
+                  {/* Hit Target Column */}
+                  <rect
+                    x={x - chartWidth / (chartData.length * 2)}
+                    y={paddingTop}
+                    width={chartWidth / chartData.length}
+                    height={chartHeight + 10}
+                    fill="transparent"
+                    style={{ cursor: 'pointer' }}
+                  />
+                </g>
+              );
+            })}
 
           {/* X Axis Labels */}
           {chartData.map((d, i) => (
             <text
               key={i}
               x={getX(i)}
-              y={height - 8}
+              y={height - 14}
               textAnchor="middle"
-              fill="rgba(148, 163, 184, 0.7)"
+              fill="var(--text-muted)"
               fontSize="10"
+              fontWeight="500"
               fontFamily="inherit"
+              opacity="0.8"
             >
               {d.label}
             </text>
           ))}
         </svg>
 
-        {/* Hover Tooltip Overlay */}
-        {hoveredIndex !== null && chartData[hoveredIndex] && (
+        {/* Empty State Overlay when no transactions in period */}
+        {!hasData && (
+          <div className="chart-empty-overlay">
+            <div className="chart-empty-badge">
+              <IconChartLine size={15} stroke={1.8} className="chart-empty-icon" />
+              <span>Awaiting transaction activity for this period</span>
+            </div>
+          </div>
+        )}
+
+        {/* Dynamic Tooltip on Hover */}
+        {hasData && hoveredIndex !== null && chartData[hoveredIndex] && (
           <div
             className="chart-tooltip"
             style={{
               left: `${(getX(hoveredIndex) / width) * 100}%`,
-              top: '15%',
+              top: '18%',
             }}
           >
             <div className="tooltip-title">{chartData[hoveredIndex].label}</div>
             <div className="tooltip-row text-emerald">
-              <span>Income:</span>
+              <span>Inflow:</span>
               <span>{formatCurrency(chartData[hoveredIndex].income)}</span>
             </div>
             <div className="tooltip-row text-rose">
-              <span>Expense:</span>
+              <span>Outflow:</span>
               <span>{formatCurrency(chartData[hoveredIndex].expense)}</span>
             </div>
             <div className="tooltip-row tooltip-net">
               <span>Net:</span>
-              <span>
+              <span className={chartData[hoveredIndex].income >= chartData[hoveredIndex].expense ? 'text-emerald' : 'text-rose'}>
                 {formatCurrency(
                   chartData[hoveredIndex].income - chartData[hoveredIndex].expense,
                   { showPositiveSign: true }
@@ -304,3 +362,4 @@ export default function CashFlowChart() {
     </div>
   );
 }
+
