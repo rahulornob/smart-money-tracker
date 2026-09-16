@@ -787,7 +787,7 @@ input:focus, select:focus, textarea:focus {
 
 .net-worth-hero {
   padding: 20px 22px;
-  background: var(--bg-card);
+  background: var(--bg-surface);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: none !important;
@@ -1091,6 +1091,11 @@ input:focus, select:focus, textarea:focus {
 .fin-card-add-slot.empty-hero-slot {
   width: 100%;
   min-height: 140px;
+  background: var(--bg-tile) !important;
+}
+
+.fin-card-add-slot.empty-hero-slot:hover {
+  background: var(--bg-tile-hover) !important;
 }
 
 /* Key Metrics Grid (Placed directly below accounts cards) - Stroke-free */
@@ -1507,19 +1512,19 @@ input:focus, select:focus, textarea:focus {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--bg-surface);
+  background: var(--bg-tile);
   padding: 8px 18px;
   border-radius: var(--radius-full);
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
   border: none !important;
   box-shadow: none !important;
 }
 
 .chart-empty-icon {
   color: var(--phantom-purple);
-  opacity: 0.85;
+  opacity: 1;
 }
 
 .chart-tooltip {
