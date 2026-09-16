@@ -1,13 +1,6 @@
 export const CURRENCIES = [
-  { code: 'USD', symbol: '$', name: 'US Dollar' },
   { code: 'BDT', symbol: '৳', name: 'Bangladeshi Taka' },
-  { code: 'EUR', symbol: '€', name: 'Euro' },
-  { code: 'GBP', symbol: '£', name: 'British Pound' },
-  { code: 'CAD', symbol: 'CA$', name: 'Canadian Dollar' },
-  { code: 'AUD', symbol: 'AU$', name: 'Australian Dollar' },
-  { code: 'JPY', symbol: '¥', name: 'Japanese Yen' },
-  { code: 'INR', symbol: '₹', name: 'Indian Rupee' },
-  { code: 'CHF', symbol: 'CHF', name: 'Swiss Franc' },
+  { code: 'USD', symbol: '$', name: 'US Dollar' },
 ];
 
 export const CATEGORIES = [

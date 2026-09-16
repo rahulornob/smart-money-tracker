@@ -36,13 +36,16 @@ export function FinanceProvider({ children }) {
           parsed.goals = [];
           parsed.accounts = [];
         }
+        if (!parsed.currency || !['BDT', 'USD'].includes(parsed.currency)) {
+          parsed.currency = 'BDT';
+        }
         return parsed;
       }
     } catch (e) {
       console.error('Failed to parse saved finance state', e);
     }
     return {
-      currency: 'USD',
+      currency: 'BDT',
       theme: 'dark',
       accounts: INITIAL_ACCOUNTS,
       categories: CATEGORIES,
