@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import CategoryIcon from '../common/CategoryIcon';
 import {
@@ -34,6 +34,22 @@ export default function SpendingHeatmapCalendar() {
 
   // Selected date key for the detail inspector
   const [selectedDateKey, setSelectedDateKey] = useState(null);
+
+  // Ref for auto-scrolling inspector drawer on mobile
+  const inspectorRef = useRef(null);
+
+  // Auto-scroll inspector into comfortable viewing position if needed
+  useEffect(() => {
+    if (selectedDateKey && inspectorRef.current) {
+      const timer = setTimeout(() => {
+        inspectorRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+        });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedDateKey]);
 
   // Hovered day for interactive tooltip
   const [hoveredDay, setHoveredDay] = useState(null);
@@ -344,7 +360,7 @@ export default function SpendingHeatmapCalendar() {
 
       {/* Selected Day Transaction Breakdown Drawer */}
       {selectedDayData && (
-        <div className="heatmap-day-inspector">
+        <div ref={inspectorRef} className="heatmap-day-inspector">
           <div className="inspector-header-row">
             <div>
               <div className="inspector-badge">

@@ -413,12 +413,12 @@ input:focus, select:focus, textarea:focus {
   box-sizing: border-box;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .app-container {
     flex-direction: column;
   }
   .content-wrapper {
-    padding: 10px 12px 110px;
+    padding: 10px 12px calc(128px + env(safe-area-inset-bottom, 24px));
     width: 100%;
     box-sizing: border-box;
   }
@@ -2981,12 +2981,6 @@ input:focus, select:focus, textarea:focus {
   gap: 8px;
 }
 
-@media (max-width: 900px) {
-  .analytics-breakdowns-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 .breakdown-card {
   padding: 18px 20px;
 }
@@ -3049,6 +3043,76 @@ input:focus, select:focus, textarea:focus {
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .analytics-page {
+    gap: 12px;
+    padding-bottom: 24px;
+  }
+  .analytics-hero-card {
+    padding: 16px 14px;
+    gap: 14px;
+  }
+  .health-score-cluster {
+    gap: 12px;
+    max-width: 100%;
+  }
+  .health-score-dial {
+    width: 52px;
+    height: 52px;
+  }
+  .health-score-dial svg {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  .health-score-val {
+    font-size: 0.95rem;
+  }
+  .analytics-title {
+    font-size: 1.08rem;
+    line-height: 1.25;
+  }
+  .analytics-sub {
+    font-size: 0.76rem;
+  }
+  .health-ratios-grid {
+    width: 100%;
+    gap: 6px;
+  }
+  .ratio-item {
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+  }
+  .ratio-label {
+    font-size: 0.62rem;
+  }
+  .ratio-val {
+    font-size: 0.95rem;
+  }
+  .ratio-sub {
+    font-size: 0.62rem;
+  }
+  .analytics-breakdowns-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .breakdown-card {
+    padding: 14px 14px;
+  }
+  .data-management-card {
+    padding: 14px 14px;
+  }
+  .data-tools-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+  }
+  .data-tools-row .btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* =========================================================
@@ -3981,7 +4045,7 @@ select.modal-select option,
   z-index: 100;
   padding: 0 6px;
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.45);
+  box-shadow: none !important;
 }
 
 @media (max-width: 900px) {
@@ -4036,11 +4100,11 @@ select.modal-select option,
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  box-shadow: none !important;
   transform: translateY(-12px);
   border: none;
   cursor: pointer;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition: transform var(--transition-fast);
 }
 
 .mobile-fab-btn:active {
@@ -5302,7 +5366,7 @@ select.modal-select option,
   padding: 8px 14px;
   border-radius: var(--radius-md);
   border: none !important;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+  box-shadow: none !important;
   pointer-events: none;
   z-index: 1000;
   white-space: nowrap;
@@ -5343,7 +5407,7 @@ select.modal-select option,
   flex-wrap: wrap;
   gap: 12px;
   padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: none !important;
 }
 
 .heatmap-hint-text {
@@ -5564,6 +5628,154 @@ select.modal-select option,
 
 .tx-heatmap-container {
   animation: pageFadeSlide 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@media (max-width: 900px) {
+  .spending-heatmap-card {
+    padding: 16px 14px;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .heatmap-header-row {
+    gap: 10px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .heatmap-title-cluster {
+    gap: 10px;
+  }
+  .heatmap-icon-box {
+    width: 36px;
+    height: 36px;
+  }
+  .heatmap-card-title {
+    font-size: 1.05rem;
+  }
+  .heatmap-card-sub {
+    font-size: 0.74rem;
+  }
+  .heatmap-month-nav {
+    justify-content: space-between;
+    width: 100%;
+  }
+  .heatmap-today-btn {
+    padding: 5px 12px;
+    font-size: 0.74rem;
+  }
+  .heatmap-nav-arrows {
+    padding: 2px 6px;
+    gap: 4px;
+  }
+  .heatmap-nav-arrow-btn {
+    width: 28px;
+    height: 28px;
+  }
+  .heatmap-current-month-label {
+    font-size: 0.82rem;
+    min-width: 110px;
+  }
+  .heatmap-stats-strip {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  .heatmap-stat-pill {
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+  }
+  .hstat-label {
+    font-size: 0.62rem;
+  }
+  .hstat-val {
+    font-size: 0.88rem;
+  }
+  .heatmap-calendar-matrix {
+    gap: 5px;
+  }
+  .heatmap-weekdays-row {
+    gap: 4px;
+  }
+  .heatmap-weekday-cell {
+    font-size: 0.65rem;
+    padding: 2px 0;
+  }
+  .heatmap-days-grid {
+    gap: 4px;
+  }
+  .heatmap-day-cell {
+    aspect-ratio: auto;
+    min-height: 42px;
+    padding: 4px 4px;
+    border-radius: var(--radius-sm);
+  }
+  .day-number-tag {
+    font-size: 0.68rem;
+  }
+  .day-spend-val {
+    font-size: 0.62rem;
+  }
+  .day-spend-zero {
+    font-size: 0.62rem;
+  }
+  .heatmap-footer-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: none !important;
+  }
+  .heatmap-hint-text {
+    font-size: 0.7rem;
+  }
+  .heatmap-legend {
+    gap: 4px;
+    align-self: flex-start;
+  }
+  .legend-label {
+    font-size: 0.68rem;
+  }
+  .legend-tile {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+  .heatmap-day-inspector {
+    scroll-margin-bottom: 120px;
+    padding: 12px 12px;
+    gap: 12px;
+  }
+  .inspector-header-row {
+    gap: 8px;
+  }
+  .inspector-date-title {
+    font-size: 0.95rem;
+  }
+  .inspector-total-pill {
+    font-size: 0.76rem;
+    padding: 4px 10px;
+  }
+  .inspector-empty-state {
+    padding: 10px 12px;
+    font-size: 0.78rem;
+  }
+  .inspector-tx-row {
+    padding: 8px 10px;
+  }
+  .inspector-cat-icon-tile {
+    width: 32px;
+    height: 32px;
+  }
+  .inspector-tx-payee {
+    font-size: 0.82rem;
+  }
+  .inspector-tx-sub {
+    font-size: 0.7rem;
+  }
+  .inspector-tx-amount {
+    font-size: 0.85rem;
+  }
+  .heatmap-floating-tooltip {
+    display: none !important;
+  }
 }
 
 /* =========================================================
