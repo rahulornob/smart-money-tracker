@@ -75,6 +75,16 @@
   --transition-normal: 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   --transition-spring: 0.36s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --transition-fluid: 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Semantic Tile & Elevation Tokens */
+  --bg-tile: #1c1d26;
+  --bg-tile-hover: #232432;
+  --bg-tile-subtle: #14151e;
+  --bg-tile-secondary: #181924;
+  --bg-dock: rgba(18, 18, 24, 0.94);
+  --bg-dropdown: #1c1d26;
+  --track-bg: #2E303E;
+  --card-outline-selected: #FFFFFF;
 }
 
 /* Light Mode (Clean Slate & Phantom Lilac Accents) */
@@ -101,6 +111,16 @@
   --shadow-md: 0 8px 20px -4px rgba(16, 16, 20, 0.08);
   --shadow-lg: 0 16px 40px -8px rgba(16, 16, 20, 0.12);
   --shadow-purple-glow: none;
+
+  /* Semantic Tile & Elevation Tokens in Light Theme */
+  --bg-tile: #F0F0F6;
+  --bg-tile-hover: #E4E4EE;
+  --bg-tile-subtle: #F4F4FA;
+  --bg-tile-secondary: #EBEBF3;
+  --bg-dock: rgba(255, 255, 255, 0.95);
+  --bg-dropdown: #FFFFFF;
+  --track-bg: #D4D4E0;
+  --card-outline-selected: #101014;
 }
 
 *, *::before, *::after {
@@ -318,7 +338,7 @@ input:focus, select:focus, textarea:focus {
 
 .btn-secondary:hover {
   background: var(--bg-card-hover);
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .btn-danger {
@@ -526,7 +546,7 @@ input:focus, select:focus, textarea:focus {
   font-family: var(--font-heading);
   font-size: 1.35rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--text-primary);
   margin: 3px 0;
 }
 
@@ -806,7 +826,7 @@ input:focus, select:focus, textarea:focus {
   box-sizing: border-box;
   background:
     radial-gradient(ellipse at 88% 18%, color-mix(in srgb, var(--card-accent, #AB9FF2) 16%, transparent) 0%, transparent 64%),
-    #1c1d26;
+    var(--bg-tile);
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
@@ -820,7 +840,7 @@ input:focus, select:focus, textarea:focus {
   box-shadow: none !important;
   background:
     radial-gradient(ellipse at 88% 18%, color-mix(in srgb, var(--card-accent, #AB9FF2) 24%, transparent) 0%, transparent 64%),
-    #232432;
+    var(--bg-tile-hover);
 }
 
 /* Card Top Row */
@@ -860,7 +880,7 @@ input:focus, select:focus, textarea:focus {
 .fin-card-name {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -885,7 +905,7 @@ input:focus, select:focus, textarea:focus {
   font-size: 0.65rem;
   font-weight: 600;
   padding: 2px 6px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
   border-radius: var(--radius-full);
   color: var(--text-muted);
 }
@@ -895,8 +915,8 @@ input:focus, select:focus, textarea:focus {
   font-size: 0.72rem;
   font-weight: 500;
   letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  background: var(--bg-card);
   padding: 2px 7px;
   border-radius: var(--radius-full);
 }
@@ -922,7 +942,7 @@ input:focus, select:focus, textarea:focus {
   font-size: 1.55rem;
   font-weight: 600;
   letter-spacing: -0.015em;
-  color: #FFFFFF;
+  color: var(--text-primary);
   line-height: 1.2;
 }
 
@@ -1003,7 +1023,7 @@ input:focus, select:focus, textarea:focus {
 
 /* Quick "+ Add Card" interactive slot - Stroke-free, Shadow-free */
 .fin-card-add-slot {
-  background: #181924 !important;
+  background: var(--bg-tile-secondary) !important;
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
@@ -1015,7 +1035,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .fin-card-add-slot:hover {
-  background: #20212e !important;
+  background: var(--bg-tile-hover) !important;
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
@@ -1131,7 +1151,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .metric-box {
-  background: #1c1d26;
+  background: var(--bg-tile);
   border: none !important;
   outline: none !important;
   border-radius: 14px;
@@ -1141,7 +1161,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .metric-box:hover {
-  background: #232432;
+  background: var(--bg-tile-hover);
   border: none !important;
   box-shadow: none !important;
   transform: none !important;
@@ -1232,7 +1252,7 @@ input:focus, select:focus, textarea:focus {
   font-size: 0.65rem;
   font-weight: 600;
   padding: 2px 7px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
   border-radius: var(--radius-full);
   color: var(--text-muted);
 }
@@ -1468,11 +1488,11 @@ input:focus, select:focus, textarea:focus {
 .chart-tooltip {
   position: absolute;
   transform: translate(-50%, -100%);
-  background: #1e1e28;
-  border: none;
+  background: var(--bg-surface);
+  border: none !important;
   border-radius: var(--radius-md);
   padding: 8px 12px;
-  box-shadow: var(--shadow-md);
+  box-shadow: none !important;
   pointer-events: none;
   min-width: 140px;
   z-index: 20;
@@ -1543,7 +1563,7 @@ input:focus, select:focus, textarea:focus {
   font-size: 1.5rem;
   font-weight: 600;
   line-height: 1.1;
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .donut-center-name {
@@ -1633,7 +1653,7 @@ input:focus, select:focus, textarea:focus {
   padding: 10px 14px;
   border-radius: var(--radius-md);
   border: none !important;
-  background: #1c1d26;
+  background: var(--bg-tile);
   min-width: 0;
   max-width: 100%;
   cursor: pointer;
@@ -1645,7 +1665,7 @@ input:focus, select:focus, textarea:focus {
   transform: none !important;
   box-shadow: none !important;
   border: none !important;
-  background: #232432;
+  background: var(--bg-tile-hover);
 }
 
 .tx-category-badge {
@@ -1810,7 +1830,7 @@ input:focus, select:focus, textarea:focus {
   flex-direction: column;
   gap: 6px;
   padding: 10px 12px;
-  background: #1c1d26;
+  background: var(--bg-tile);
   border: none !important;
   box-shadow: none !important;
   border-radius: var(--radius-md);
@@ -1941,7 +1961,7 @@ input:focus, select:focus, textarea:focus {
   color: var(--text-secondary);
 }
 
-.type-tab-btn.active.all { background: rgba(255, 255, 255, 0.12); color: #FFFFFF; }
+.type-tab-btn.active.all { background: var(--phantom-purple-bg); color: var(--phantom-purple); }
 .type-tab-btn.active.expense { background: rgba(255, 92, 92, 0.2); color: var(--phantom-coral-light); }
 .type-tab-btn.active.income { background: rgba(48, 224, 161, 0.2); color: var(--phantom-mint); }
 .type-tab-btn.active.transfer { background: rgba(171, 159, 242, 0.2); color: var(--phantom-purple); }
@@ -2010,7 +2030,8 @@ input:focus, select:focus, textarea:focus {
   align-items: center;
   gap: 20px;
   padding: 10px 18px;
-  background: rgba(20, 20, 28, 0.5);
+  background: var(--bg-tile);
+  color: var(--text-secondary);
   border: none;
   border-radius: var(--radius-md);
   font-size: 0.825rem;
@@ -2210,7 +2231,7 @@ input:focus, select:focus, textarea:focus {
   font-size: 1.35rem;
   font-weight: 600;
 }
-.strip-val.highlight { color: #FFFFFF; }
+.strip-val.highlight { color: var(--text-primary); }
 
 .strip-actions {
   display: flex;
@@ -2237,7 +2258,7 @@ input:focus, select:focus, textarea:focus {
   justify-content: space-between;
   min-height: 185px;
   border-radius: var(--radius-lg);
-  background: #1c1d26;
+  background: var(--bg-tile);
   border: none !important;
   box-shadow: none !important;
   transition: background var(--transition-fast);
@@ -2248,7 +2269,7 @@ input:focus, select:focus, textarea:focus {
 .wallet-card-item:hover {
   transform: none !important;
   box-shadow: none !important;
-  background: #232432;
+  background: var(--bg-tile-hover);
   border: none !important;
 }
 
@@ -2301,7 +2322,7 @@ input:focus, select:focus, textarea:focus {
 .card-name-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--text-primary);
   letter-spacing: -0.01em;
   margin: 0;
 }
@@ -2357,7 +2378,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .btn-card-action:hover {
-  color: #FFFFFF;
+  color: var(--text-primary);
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -2400,7 +2421,7 @@ input:focus, select:focus, textarea:focus {
   font-family: var(--font-heading);
   font-size: 2.1rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .total-lead {
@@ -2439,7 +2460,7 @@ input:focus, select:focus, textarea:focus {
   font-family: var(--font-heading);
   font-size: 1.2rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .burn-sub {
@@ -2507,7 +2528,7 @@ input:focus, select:focus, textarea:focus {
   font-family: var(--font-heading);
   font-size: 1.15rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .digits-total {
@@ -2566,7 +2587,7 @@ input:focus, select:focus, textarea:focus {
 .planned-hero-title {
   font-size: 1.45rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .planned-hero-sub {
@@ -2586,7 +2607,7 @@ input:focus, select:focus, textarea:focus {
   display: flex;
   flex-direction: column;
   padding: 8px 14px;
-  background: rgba(20, 20, 28, 0.5);
+  background: var(--bg-tile-subtle);
   border: none;
   border-radius: var(--radius-md);
 }
@@ -2645,7 +2666,7 @@ input:focus, select:focus, textarea:focus {
 .planned-item-name {
   font-size: 0.925rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .planned-meta {
@@ -2713,9 +2734,10 @@ input:focus, select:focus, textarea:focus {
   position: fixed;
   top: 24px;
   right: 24px;
-  background: #1e1e28;
-  border: none;
-  box-shadow: var(--shadow-lg);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: none !important;
+  box-shadow: none !important;
   border-radius: var(--radius-full);
   padding: 10px 18px;
   display: flex;
@@ -2748,7 +2770,7 @@ input:focus, select:focus, textarea:focus {
 .goals-hero-title {
   font-size: 1.45rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .goals-hero-sub {
@@ -2813,7 +2835,7 @@ input:focus, select:focus, textarea:focus {
 .goal-card-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .goal-stat-numbers {
@@ -2827,7 +2849,7 @@ input:focus, select:focus, textarea:focus {
   font-family: var(--font-heading);
   font-size: 1.25rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .goal-target-digits {
@@ -2924,7 +2946,7 @@ input:focus, select:focus, textarea:focus {
 .analytics-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .analytics-sub {
@@ -2940,7 +2962,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .ratio-item {
-  background: #1c1d26;
+  background: var(--bg-tile);
   border: none !important;
   outline: none !important;
   border-radius: var(--radius-md);
@@ -2952,7 +2974,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .ratio-item:hover {
-  background: #232432;
+  background: var(--bg-tile-hover);
   border: none !important;
   box-shadow: none !important;
 }
@@ -3325,7 +3347,7 @@ input[type="date"] {
 .form-group textarea:focus,
 .modal-select:focus {
   outline: none;
-  background: rgba(30, 30, 44, 0.95);
+  background: var(--bg-surface);
   box-shadow: 0 0 0 2px var(--phantom-purple);
 }
 
@@ -3342,8 +3364,8 @@ select.modal-select,
 
 select.modal-select option,
 .form-group select option {
-  background: #1a1a24;
-  color: #ffffff;
+  background: var(--bg-surface);
+  color: var(--text-primary);
   padding: 10px;
 }
 
@@ -3351,7 +3373,7 @@ select.modal-select option,
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  background: rgba(16, 16, 24, 0.8);
+  background: var(--bg-input);
   border: none;
   border-radius: var(--radius-lg);
   padding: 14px 20px;
@@ -3374,7 +3396,7 @@ select.modal-select option,
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
-  color: #FFFFFF;
+  color: var(--text-primary);
   padding: 0;
   width: 100%;
   line-height: 1;
@@ -3462,7 +3484,7 @@ select.modal-select option,
 
 .btn-custom-color-toggle:hover {
   background: rgba(171, 159, 242, 0.1);
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .color-picker-grid {
@@ -3492,7 +3514,7 @@ select.modal-select option,
 
 .color-swatch-btn.selected {
   outline: none;
-  box-shadow: 0 0 0 2.5px var(--bg-surface), 0 0 0 4.5px #FFFFFF;
+  box-shadow: 0 0 0 2.5px var(--bg-surface), 0 0 0 4.5px var(--card-outline-selected);
   transform: scale(1.1);
 }
 
@@ -3565,7 +3587,7 @@ select.modal-select option,
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
-  color: #FFFFFF !important;
+  color: var(--text-primary) !important;
   font-family: monospace;
   font-size: 0.88rem;
   font-weight: 600;
@@ -3634,7 +3656,7 @@ select.modal-select option,
 .exclude-stats-track {
   width: 38px;
   height: 22px;
-  background-color: #2E303E;
+  background-color: var(--track-bg);
   border-radius: var(--radius-full);
   position: relative;
   transition: background-color var(--transition-fast);
@@ -3741,7 +3763,7 @@ select.modal-select option,
 
 .category-dropdown-trigger.active {
   box-shadow: 0 0 0 2px var(--phantom-purple);
-  background: rgba(30, 30, 44, 0.95);
+  background: var(--bg-surface);
 }
 
 .trigger-left-content {
@@ -3794,7 +3816,7 @@ select.modal-select option,
   left: 0;
   right: 0;
   z-index: 200;
-  background: #1c1d26;
+  background: var(--bg-dropdown);
   border-radius: var(--radius-lg);
   box-shadow: none !important;
   border: none !important;
@@ -3851,7 +3873,7 @@ select.modal-select option,
   box-shadow: none !important;
   padding: 0 !important;
   font-size: 0.85rem;
-  color: #FFFFFF;
+  color: var(--text-primary);
   width: 100%;
 }
 
@@ -4036,7 +4058,7 @@ select.modal-select option,
   left: 0;
   right: 0;
   height: 64px;
-  background: rgba(18, 18, 24, 0.96);
+  background: var(--bg-dock);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-top: none;
@@ -4131,7 +4153,7 @@ select.modal-select option,
 
 .mobile-more-sheet {
   width: 100%;
-  background: #171722;
+  background: var(--bg-surface);
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   padding: 20px 18px calc(24px + env(safe-area-inset-bottom, 0px));
   box-shadow: none !important;
@@ -4171,13 +4193,13 @@ select.modal-select option,
   justify-content: space-between;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: none;
 }
 
 .more-sheet-title {
   font-size: 1.05rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .more-sheet-grid {
@@ -4223,7 +4245,7 @@ select.modal-select option,
 .more-item-name {
   font-size: 0.92rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--text-primary);
 }
 
 .more-item-sub {
@@ -4770,7 +4792,7 @@ select.modal-select option,
   align-items: center;
   gap: 3px;
   padding: 5px 6px;
-  background: rgba(22, 23, 32, 0.94);
+  background: var(--bg-dock);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: none !important;
@@ -4781,7 +4803,7 @@ select.modal-select option,
 }
 
 .floating-action-bar:hover {
-  background: rgba(28, 29, 40, 0.96);
+  background: var(--bg-dock);
   border: none !important;
   box-shadow: none !important;
 }
@@ -4811,7 +4833,7 @@ select.modal-select option,
 .floating-dock-btn:hover,
 .floating-dock-btn:focus-visible,
 .floating-dock-btn.is-expanded {
-  color: #FFFFFF;
+  color: var(--text-primary);
   background: rgba(255, 255, 255, 0.08);
   padding: 4px 10px 4px 6px;
 }
@@ -4924,7 +4946,7 @@ select.modal-select option,
 .dock-divider {
   width: 1px;
   height: 16px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--border-color);
   margin: 0 1px;
 }
 
@@ -4971,7 +4993,7 @@ select.modal-select option,
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background: rgba(22, 23, 32, 0.96);
+  background: var(--bg-dock);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: none !important;
@@ -5194,7 +5216,7 @@ select.modal-select option,
 }
 
 .heatmap-stat-pill {
-  background: #14151e;
+  background: var(--bg-tile);
   border-radius: var(--radius-md);
   padding: 12px 14px;
   display: flex;
@@ -5280,11 +5302,11 @@ select.modal-select option,
 
 /* Heatmap Intensity Levels */
 .heatmap-day-cell.level-0 {
-  background: #15161f;
+  background: var(--bg-tile);
   color: var(--text-muted);
 }
 .heatmap-day-cell.level-0:hover {
-  background: #1e1f2b;
+  background: var(--bg-tile-hover);
   transform: translateY(-2px);
 }
 
@@ -5330,7 +5352,7 @@ select.modal-select option,
 }
 
 .heatmap-day-cell.is-selected {
-  outline: 2px solid #FFFFFF !important;
+  outline: 2px solid var(--card-outline-selected) !important;
   outline-offset: -2px;
   transform: scale(1.03);
   z-index: 2;
@@ -5353,14 +5375,15 @@ select.modal-select option,
 
 .day-spend-zero {
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--text-muted);
+  opacity: 0.5;
   font-weight: 500;
   line-height: 1.2;
 }
 
 /* Floating Tooltip */
 .heatmap-floating-tooltip {
-  background: rgba(18, 19, 27, 0.96);
+  background: var(--bg-dock);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   padding: 8px 14px;
@@ -5434,7 +5457,7 @@ select.modal-select option,
   display: inline-block;
 }
 
-.legend-tile.level-0 { background: #15161f; }
+.legend-tile.level-0 { background: var(--bg-tile); }
 .legend-tile.level-1 { background: rgba(255, 92, 92, 0.16); }
 .legend-tile.level-2 { background: rgba(255, 92, 92, 0.36); }
 .legend-tile.level-3 { background: rgba(255, 92, 92, 0.65); }
@@ -5442,7 +5465,7 @@ select.modal-select option,
 
 /* Day Inspector Drawer */
 .heatmap-day-inspector {
-  background: #14151e;
+  background: var(--bg-tile);
   border-radius: var(--radius-lg);
   padding: 18px 20px;
   margin-top: 4px;
@@ -5595,7 +5618,7 @@ select.modal-select option,
 /* Transactions View Mode Switcher Pills */
 .tx-view-pill-group {
   display: inline-flex;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--bg-tile);
   padding: 3px;
   border-radius: var(--radius-full);
   gap: 2px;
@@ -5621,8 +5644,8 @@ select.modal-select option,
 }
 
 .tx-view-pill.active {
-  background: #FFFFFF;
-  color: #08080C;
+  background: var(--phantom-purple-bg);
+  color: var(--phantom-purple);
   font-weight: 700;
 }
 
