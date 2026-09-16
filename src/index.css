@@ -1091,11 +1091,6 @@ input:focus, select:focus, textarea:focus {
 .fin-card-add-slot.empty-hero-slot {
   width: 100%;
   min-height: 140px;
-  background: var(--bg-tile) !important;
-}
-
-.fin-card-add-slot.empty-hero-slot:hover {
-  background: var(--bg-tile-hover) !important;
 }
 
 /* Key Metrics Grid (Placed directly below accounts cards) - Stroke-free */
@@ -1162,7 +1157,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .metric-box {
-  background: var(--bg-tile);
+  background: rgba(255, 255, 255, 0.05);
   border: none !important;
   outline: none !important;
   border-radius: 14px;
@@ -1172,10 +1167,18 @@ input:focus, select:focus, textarea:focus {
 }
 
 .metric-box:hover {
-  background: var(--bg-tile-hover);
+  background: rgba(255, 255, 255, 0.08);
   border: none !important;
   box-shadow: none !important;
   transform: none !important;
+}
+
+[data-theme="light"] .metric-box {
+  background: var(--bg-tile);
+}
+
+[data-theme="light"] .metric-box:hover {
+  background: var(--bg-tile-hover);
 }
 
 .metric-header {
