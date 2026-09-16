@@ -824,9 +824,7 @@ input:focus, select:focus, textarea:focus {
   user-select: none;
   overflow: hidden;
   box-sizing: border-box;
-  background:
-    radial-gradient(ellipse at 88% 18%, color-mix(in srgb, var(--card-accent, #AB9FF2) 16%, transparent) 0%, transparent 64%),
-    var(--bg-tile);
+  background: var(--bg-tile);
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
@@ -838,9 +836,7 @@ input:focus, select:focus, textarea:focus {
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
-  background:
-    radial-gradient(ellipse at 88% 18%, color-mix(in srgb, var(--card-accent, #AB9FF2) 24%, transparent) 0%, transparent 64%),
-    var(--bg-tile-hover);
+  background: var(--bg-tile-hover);
 }
 
 /* Card Top Row */
@@ -863,12 +859,22 @@ input:focus, select:focus, textarea:focus {
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--card-accent, #AB9FF2) 15%, rgba(255, 255, 255, 0.05));
+  background: color-mix(in srgb, var(--card-accent, #AB9FF2) 20%, transparent);
   color: var(--card-accent, #AB9FF2);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.fin-card:hover .fin-card-icon-wrap {
+  background: color-mix(in srgb, var(--card-accent, #AB9FF2) 28%, transparent);
+}
+
+[data-theme="light"] .fin-card-icon-wrap {
+  background: color-mix(in srgb, var(--card-accent, #AB9FF2) 22%, transparent);
+  color: color-mix(in srgb, var(--card-accent, #AB9FF2) 75%, #13141a);
 }
 
 .fin-card-meta {
