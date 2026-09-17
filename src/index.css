@@ -63,7 +63,17 @@
   --coral-text-strong: var(--phantom-coral);
   --purple-text: var(--phantom-purple);
   --amber-text: var(--phantom-amber);
-  --border-color: rgba(255, 255, 255, 0.08);
+
+  /* Elevation Overlay Scale — the ONE system for neutral chip/track/hover/
+     active backgrounds. Every such surface picks one of these five steps
+     instead of a one-off rgba() value. Dark theme washes with white-on-dark;
+     light theme (below) washes with an equal-weight dark-on-light tint. */
+  --overlay-2: rgba(255, 255, 255, 0.02);
+  --overlay-3: rgba(255, 255, 255, 0.03);
+  --overlay-5: rgba(255, 255, 255, 0.05);
+  --overlay-8: rgba(255, 255, 255, 0.08);
+  --overlay-10: rgba(255, 255, 255, 0.10);
+  --border-color: var(--overlay-8);
 
   /* Typography: Highly readable Modern Geometric Neo-Grotesque Onest & Apple SF Pro */
   --font-heading: 'Onest', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", "Segoe UI", Roboto, sans-serif;
@@ -127,7 +137,15 @@
   --coral-text-strong: #DC2626;
   --purple-text: #7C3AED;
   --amber-text: #B45309;
-  --border-color: rgba(16, 16, 20, 0.08);
+
+  /* Elevation Overlay Scale — same five steps, mirrored as a dark-on-light
+     wash so it stays visible against light surfaces. */
+  --overlay-2: rgba(16, 16, 20, 0.02);
+  --overlay-3: rgba(16, 16, 20, 0.03);
+  --overlay-5: rgba(16, 16, 20, 0.05);
+  --overlay-8: rgba(16, 16, 20, 0.08);
+  --overlay-10: rgba(16, 16, 20, 0.10);
+  --border-color: var(--overlay-8);
 
   --shadow-sm: none;
   --shadow-md: 0 8px 20px -4px rgba(16, 16, 20, 0.08);
@@ -144,45 +162,6 @@
   --track-bg: #D4D4E0;
   --card-outline-selected: #101014;
 }
-
-/* ===========================================================
-   LIGHT THEME — Surface Overlay Overrides
-   The rules above use translucent WHITE overlays for subtle
-   chip/pill/track backgrounds, tuned for dark surfaces. On
-   light surfaces a white overlay is invisible, so light mode
-   swaps in an equivalent-weight dark tint instead.
-   =========================================================== */
-[data-theme="light"] .glass-card-interactive:hover { background: rgba(16, 16, 20, 0.06); }
-[data-theme="light"] .badge-neutral { background: rgba(16, 16, 20, 0.06); }
-[data-theme="light"] .progress-bar-bg { background: rgba(16, 16, 20, 0.055); }
-[data-theme="light"] .nav-item:hover { background: rgba(16, 16, 20, 0.05); }
-[data-theme="light"] .credit-progress-bar { background: rgba(16, 16, 20, 0.06); }
-[data-theme="light"] .legend-item:hover, [data-theme="light"] .legend-item.active-legend { background: rgba(16, 16, 20, 0.05); }
-[data-theme="light"] .legend-bar-track { background: rgba(16, 16, 20, 0.06); }
-[data-theme="light"] .tx-row-item:hover { background: rgba(16, 16, 20, 0.04); }
-[data-theme="light"] .btn-card-action { background: rgba(16, 16, 20, 0.04); }
-[data-theme="light"] .btn-card-action:hover { background: rgba(16, 16, 20, 0.08); }
-[data-theme="light"] .tx-type-btn:hover { background: rgba(16, 16, 20, 0.06); }
-[data-theme="light"] .cat-pill-item:hover { background: rgba(16, 16, 20, 0.06); }
-[data-theme="light"] .btn-spectrum-trigger { background: rgba(16, 16, 20, 0.06); }
-[data-theme="light"] .btn-spectrum-trigger:hover { background: rgba(16, 16, 20, 0.12); }
-[data-theme="light"] .card-excluded-badge { background: rgba(16, 16, 20, 0.06); }
-[data-theme="light"] .category-dropdown-trigger:hover { background: rgba(16, 16, 20, 0.06); }
-[data-theme="light"] .cat-dropdown-item:hover { background: rgba(16, 16, 20, 0.055); }
-[data-theme="light"] .transfer-sub-btn:hover { background: rgba(16, 16, 20, 0.05); }
-[data-theme="light"] .quick-due-presets button { background: rgba(16, 16, 20, 0.06); }
-[data-theme="light"] .quick-due-presets button:hover { background: rgba(16, 16, 20, 0.13); }
-[data-theme="light"] .modal-delete-btn:hover { background: rgba(16, 16, 20, 0.05); }
-[data-theme="light"] .modal-delete-btn:active { background: rgba(16, 16, 20, 0.08); }
-[data-theme="light"] .more-sheet-item { background: rgba(16, 16, 20, 0.04); }
-[data-theme="light"] .hero-change-pill { background: rgba(16, 16, 20, 0.05); }
-[data-theme="light"] .floating-dock-btn.is-expanded { background: rgba(16, 16, 20, 0.06); }
-[data-theme="light"] .dock-kbd-hint { background: rgba(16, 16, 20, 0.06); }
-[data-theme="light"] .mobile-quick-action-item:active { background: rgba(16, 16, 20, 0.06); }
-[data-theme="light"] .heatmap-nav-arrows { background: rgba(16, 16, 20, 0.05); }
-[data-theme="light"] .heatmap-nav-arrow-btn:hover { background: rgba(16, 16, 20, 0.08); }
-[data-theme="light"] .inspector-tx-row { background: rgba(16, 16, 20, 0.035); }
-[data-theme="light"] .inspector-tx-row:hover { background: rgba(16, 16, 20, 0.05); }
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -353,7 +332,7 @@ input:focus, select:focus, textarea:focus {
 .glass-card-interactive:hover {
   transform: none;
   box-shadow: none;
-  background: rgba(255, 255, 255, 0.075);
+  background: var(--overlay-8);
 }
 
 /* =========================================================
@@ -463,7 +442,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .badge-neutral {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-8);
   color: var(--text-secondary);
   border: none;
 }
@@ -509,7 +488,7 @@ input:focus, select:focus, textarea:focus {
 .progress-bar-bg {
   width: 100%;
   height: 7px;
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--overlay-8);
   border-radius: var(--radius-full);
   overflow: hidden;
   position: relative;
@@ -655,7 +634,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .nav-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--overlay-5);
   color: var(--text-primary);
 }
 
@@ -1077,7 +1056,7 @@ input:focus, select:focus, textarea:focus {
 
 .credit-progress-bar {
   height: 4px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-8);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
@@ -1218,7 +1197,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .metric-box {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--overlay-5);
   border: none !important;
   outline: none !important;
   border-radius: 14px;
@@ -1228,7 +1207,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .metric-box:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-8);
   border: none !important;
   box-shadow: none !important;
   transform: none !important;
@@ -1702,7 +1681,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .legend-item:hover, .legend-item.active-legend {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--overlay-5);
 }
 
 .legend-icon-badge {
@@ -1730,7 +1709,7 @@ input:focus, select:focus, textarea:focus {
 
 .legend-bar-track {
   height: 4px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-8);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
@@ -2197,7 +2176,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .tx-row-item:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--overlay-5);
 }
 
 .tx-cat-icon-wrapper {
@@ -2480,7 +2459,7 @@ input:focus, select:focus, textarea:focus {
   align-items: center;
   justify-content: center;
   color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--overlay-5);
   border: none;
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -2488,7 +2467,7 @@ input:focus, select:focus, textarea:focus {
 
 .btn-card-action:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--overlay-10);
 }
 
 .btn-card-action.delete:hover {
@@ -3356,7 +3335,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .tx-type-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-8);
   color: var(--text-primary);
 }
 
@@ -3551,7 +3530,7 @@ select.modal-select option,
 }
 
 .cat-pill-item:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-8);
 }
 
 .cat-pill-item.selected {
@@ -3714,7 +3693,7 @@ select.modal-select option,
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-8);
   border: none;
   color: var(--text-primary);
   font-size: 0.78rem;
@@ -3727,7 +3706,7 @@ select.modal-select option,
 }
 
 .btn-spectrum-trigger:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--overlay-10);
 }
 
 /* =========================================================
@@ -3833,7 +3812,7 @@ select.modal-select option,
   font-size: 0.65rem;
   font-weight: 600;
   color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-8);
   padding: 2px 8px;
   border-radius: var(--radius-full);
   letter-spacing: 0.04em;
@@ -3872,7 +3851,7 @@ select.modal-select option,
 }
 
 .category-dropdown-trigger:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-8);
 }
 
 .category-dropdown-trigger.active {
@@ -4025,7 +4004,7 @@ select.modal-select option,
 }
 
 .cat-dropdown-item:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--overlay-8);
 }
 
 .cat-dropdown-item.selected {
@@ -4092,7 +4071,7 @@ select.modal-select option,
 
 .transfer-sub-btn:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--overlay-5);
 }
 
 .transfer-sub-btn.active.give {
@@ -4165,7 +4144,7 @@ select.modal-select option,
 .quick-due-presets button {
   border: none !important;
   outline: none !important;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-8);
   color: var(--text-secondary);
   font-size: 0.65rem;
   font-weight: 600;
@@ -4179,7 +4158,7 @@ select.modal-select option,
 }
 
 .quick-due-presets button:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: var(--overlay-10);
   color: var(--text-primary);
 }
 
@@ -4290,11 +4269,11 @@ select.modal-select option,
 
 .modal-delete-btn:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--overlay-5);
 }
 
 .modal-delete-btn:active {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--overlay-10);
   transform: scale(0.98);
 }
 
@@ -4489,7 +4468,7 @@ select.modal-select option,
   align-items: center;
   gap: 14px;
   padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--overlay-5);
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
@@ -4656,7 +4635,7 @@ select.modal-select option,
   font-size: 0.78rem;
   font-weight: 600;
   box-shadow: none;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--overlay-5);
   color: var(--text-muted);
 }
 
@@ -5110,7 +5089,7 @@ select.modal-select option,
 .floating-dock-btn:focus-visible,
 .floating-dock-btn.is-expanded {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-8);
   padding: 4px 10px 4px 6px;
 }
 
@@ -5210,7 +5189,7 @@ select.modal-select option,
   font-size: 0.65rem;
   font-weight: 600;
   color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-8);
   padding: 1px 5px;
   border-radius: 4px;
   border: none !important;
@@ -5343,7 +5322,7 @@ select.modal-select option,
 }
 
 .mobile-quick-action-item:active {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-8);
 }
 
 .mobile-quick-icon-box {
@@ -5446,7 +5425,7 @@ select.modal-select option,
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--overlay-5);
   padding: 3px 8px;
   border-radius: var(--radius-full);
 }
@@ -5466,7 +5445,7 @@ select.modal-select option,
 }
 
 .heatmap-nav-arrow-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--overlay-10);
   color: var(--text-primary);
 }
 
@@ -5829,13 +5808,13 @@ select.modal-select option,
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--overlay-3);
   border-radius: var(--radius-md);
   transition: background var(--transition-fast);
 }
 
 .inspector-tx-row:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--overlay-5);
 }
 
 .inspector-tx-left {
