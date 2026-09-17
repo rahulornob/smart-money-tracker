@@ -72,13 +72,29 @@ export default function RecentTransactionsWidget({ onViewAll, onSelectTransactio
                 <div className="tx-info-block">
                   <div className="tx-payee-name">{tx.payee || cat.name}</div>
                   <div className="tx-meta-row">
-                    <span className="tx-account-name">
-                      {tx.type === 'transfer'
-                        ? tx.recipient
-                          ? `From ${fromAcc?.name || 'Account'} to ${tx.recipient}`
-                          : `${fromAcc?.name || 'Account'} → ${toAcc?.name || 'Account'}`
-                        : acc?.name || 'Main Account'}
-                    </span>
+                    {(() => {
+                      const isBorrow =
+                        tx.type === 'transfer' &&
+                        (tx.transferMode === 'borrow' || tx.status === 'borrowed' || tx.status === 'repaid');
+                      const isGive =
+                        tx.type === 'transfer' &&
+                        (tx.transferMode === 'give' || (tx.recipient && !tx.toAccountId && !isBorrow));
+
+                      let accountLabel = acc?.name || 'Main Account';
+                      if (isBorrow) {
+                        accountLabel = tx.recipient ? `Borrowed from ${tx.recipient}` : toAcc?.name || 'Account';
+                      } else if (isGive) {
+                        accountLabel = tx.recipient ? `To ${tx.recipient}` : fromAcc?.name || 'Account';
+                      } else if (tx.type === 'transfer') {
+                        accountLabel = `${fromAcc?.name || 'Account'} → ${toAcc?.name || 'Account'}`;
+                      }
+
+                      return (
+                        <span className="tx-account-name">
+                          {accountLabel}
+                        </span>
+                      );
+                    })()}
                     <span className="meta-separator">•</span>
                     <span className="tx-date-label">
                       <IconClock size={11} stroke={1.8} />
@@ -89,27 +105,52 @@ export default function RecentTransactionsWidget({ onViewAll, onSelectTransactio
 
                 {/* Amount display */}
                 <div className="tx-amount-block">
-                  <span
-                    className={`tx-amount-value ${
-                      tx.type === 'income'
-                        ? 'text-emerald'
-                        : tx.type === 'expense'
-                        ? 'text-rose'
-                        : 'text-transfer'
-                    }`}
-                  >
-                    {tx.type === 'income' ? '+' : tx.type === 'expense' ? '-' : ''}
-                    {formatCurrency(tx.amount)}
-                  </span>
-                  <div className="tx-status-indicator">
-                    {tx.type === 'transfer' ? (
-                      <span className="type-badge-mini transfer">Transfer</span>
-                    ) : (
-                      <span className={`type-badge-mini ${tx.type}`}>
-                        {tx.type === 'income' ? 'Income' : 'Expense'}
-                      </span>
-                    )}
-                  </div>
+                  {(() => {
+                    const isBorrow =
+                      tx.type === 'transfer' &&
+                      (tx.transferMode === 'borrow' || tx.status === 'borrowed' || tx.status === 'repaid');
+                    const isGive =
+                      tx.type === 'transfer' &&
+                      (tx.transferMode === 'give' || (tx.recipient && !tx.toAccountId && !isBorrow));
+
+                    let amountSign = '';
+                    let amountColor = 'text-transfer';
+                    if (tx.type === 'income' || isBorrow) {
+                      amountSign = '+';
+                      amountColor = 'text-emerald';
+                    } else if (tx.type === 'expense' || isGive) {
+                      amountSign = '-';
+                      amountColor = 'text-rose';
+                    }
+
+                    let typeBadgeText = tx.type === 'income' ? 'Income' : 'Expense';
+                    let typeBadgeClass = tx.type;
+
+                    if (isBorrow) {
+                      typeBadgeText = tx.status === 'repaid' ? 'Repaid' : 'Borrowed';
+                      typeBadgeClass = 'borrow';
+                    } else if (isGive) {
+                      typeBadgeText = tx.status === 'gift' ? 'Gift' : tx.status === 'returned' ? 'Returned' : 'Lent';
+                      typeBadgeClass = 'lend';
+                    } else if (tx.type === 'transfer') {
+                      typeBadgeText = 'Transfer';
+                      typeBadgeClass = 'transfer';
+                    }
+
+                    return (
+                      <>
+                        <span className={`tx-amount-value ${amountColor}`}>
+                          {amountSign}
+                          {formatCurrency(tx.amount)}
+                        </span>
+                        <div className="tx-status-indicator">
+                          <span className={`type-badge-mini ${typeBadgeClass}`}>
+                            {typeBadgeText}
+                          </span>
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
             );

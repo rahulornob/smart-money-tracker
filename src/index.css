@@ -2011,6 +2011,7 @@ input:focus, select:focus, textarea:focus {
 .type-tab-btn.active.all { background: var(--phantom-purple-bg); color: var(--phantom-purple); }
 .type-tab-btn.active.expense { background: rgba(255, 92, 92, 0.2); color: var(--phantom-coral-light); }
 .type-tab-btn.active.income { background: rgba(48, 224, 161, 0.2); color: var(--phantom-mint); }
+.type-tab-btn.active.peer { background: rgba(245, 158, 11, 0.2); color: #FBBF24; }
 .type-tab-btn.active.transfer { background: rgba(171, 159, 242, 0.2); color: var(--phantom-purple); }
 
 .filter-select-wrapper {
@@ -3994,8 +3995,108 @@ select.modal-select option,
 }
 
 /* =========================================================
-   TRANSFER REDESIGN: PEER LENDING / GIVING MONEY STYLES
+   TRANSFER REDESIGN: PEER LENDING & BORROWING STYLES
    ========================================================= */
+
+.transfer-submode-selector {
+  display: flex;
+  gap: 6px;
+  background: var(--bg-input);
+  padding: 4px;
+  border-radius: var(--radius-full);
+  margin-bottom: 8px;
+}
+
+.transfer-sub-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: none !important;
+  background: transparent;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.transfer-sub-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.transfer-sub-btn.active.give {
+  background: rgba(255, 92, 92, 0.16);
+  color: var(--phantom-coral-light);
+}
+
+.transfer-sub-btn.active.borrow {
+  background: rgba(48, 224, 161, 0.16);
+  color: var(--phantom-mint);
+}
+
+.transfer-sub-btn.active.internal {
+  background: rgba(171, 159, 242, 0.16);
+  color: var(--phantom-purple);
+}
+
+.transfer-helper-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 92, 92, 0.08);
+  color: var(--phantom-coral-light);
+  font-size: 0.76rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.transfer-helper-banner.borrow {
+  background: rgba(48, 224, 161, 0.08);
+  color: var(--phantom-mint);
+}
+
+.transfer-helper-banner.internal {
+  background: rgba(171, 159, 242, 0.08);
+  color: var(--phantom-purple);
+}
+
+.form-label-with-presets {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.quick-due-presets {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.quick-due-presets button {
+  border: none !important;
+  outline: none !important;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.quick-due-presets button:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--text-primary);
+}
 
 .tx-lent-pill {
   font-size: 0.65rem;
@@ -4004,6 +4105,15 @@ select.modal-select option,
   border-radius: var(--radius-full);
   background: rgba(245, 158, 11, 0.15);
   color: #FBBF24;
+}
+
+.tx-borrow-pill {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: rgba(48, 224, 161, 0.15);
+  color: var(--phantom-mint);
 }
 
 .tx-gift-pill {
@@ -4022,6 +4132,36 @@ select.modal-select option,
   border-radius: var(--radius-full);
   background: rgba(48, 224, 161, 0.15);
   color: var(--phantom-mint);
+}
+
+.btn-tx-settle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: var(--radius-full);
+  border: none !important;
+  background: rgba(48, 224, 161, 0.12);
+  color: var(--phantom-mint);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-tx-settle:hover {
+  background: rgba(48, 224, 161, 0.22);
+  transform: translateY(-1px);
+}
+
+.type-badge-mini.borrow {
+  background: rgba(48, 224, 161, 0.14);
+  color: var(--phantom-mint);
+}
+
+.type-badge-mini.lend {
+  background: rgba(245, 158, 11, 0.14);
+  color: #FBBF24;
 }
 
 .modal-actions-footer {

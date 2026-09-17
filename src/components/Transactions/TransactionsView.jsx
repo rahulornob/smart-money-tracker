@@ -13,6 +13,7 @@ import {
   IconStack2,
   IconReceipt,
   IconCalendarStats,
+  IconCheck,
 } from '@tabler/icons-react';
 
 export default function TransactionsView({ onOpenNewTransaction, onEditTransaction }) {
@@ -22,11 +23,12 @@ export default function TransactionsView({ onOpenNewTransaction, onEditTransacti
     categories,
     formatCurrency,
     deleteTransaction,
+    editTransaction,
   } = useFinance();
 
   const [viewMode, setViewMode] = useState('list'); // 'list' | 'heatmap'
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState('all'); // 'all', 'expense', 'income', 'transfer'
+  const [selectedType, setSelectedType] = useState('all'); // 'all', 'expense', 'income', 'transfer', 'peer'
   const [selectedAccount, setSelectedAccount] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('date-desc'); // 'date-desc', 'date-asc', 'amount-desc', 'amount-asc'
@@ -36,12 +38,33 @@ export default function TransactionsView({ onOpenNewTransaction, onEditTransacti
     return transactions
       .filter((tx) => {
         // Type filter
-        if (selectedType !== 'all' && tx.type !== selectedType) return false;
+        if (selectedType !== 'all') {
+          if (selectedType === 'peer') {
+            const isPeer =
+              tx.type === 'transfer' &&
+              (tx.transferMode === 'give' ||
+                tx.transferMode === 'borrow' ||
+                (tx.recipient && !tx.toAccountId));
+            if (!isPeer) return false;
+          } else if (selectedType === 'transfer') {
+            const isInternal =
+              tx.type === 'transfer' &&
+              (tx.transferMode === 'internal' ||
+                (tx.fromAccountId && tx.toAccountId && !tx.recipient));
+            if (!isInternal) return false;
+          } else if (tx.type !== selectedType) {
+            return false;
+          }
+        }
 
         // Account filter
         if (selectedAccount !== 'all') {
           if (tx.type === 'transfer') {
-            if (tx.fromAccountId !== selectedAccount && tx.toAccountId !== selectedAccount) {
+            if (
+              tx.fromAccountId !== selectedAccount &&
+              tx.toAccountId !== selectedAccount &&
+              tx.accountId !== selectedAccount
+            ) {
               return false;
             }
           } else {
@@ -189,16 +212,19 @@ export default function TransactionsView({ onOpenNewTransaction, onEditTransacti
         <div className="tx-filters-row">
           {/* Type Filter Tabs */}
           <div className="type-tabs-group">
-            {['all', 'expense', 'income', 'transfer'].map((type) => (
+            {[
+              { id: 'all', label: 'All Types' },
+              { id: 'expense', label: 'Expenses' },
+              { id: 'income', label: 'Income' },
+              { id: 'peer', label: 'Lend & Borrow' },
+              { id: 'transfer', label: 'Transfers' },
+            ].map(({ id, label }) => (
               <button
-                key={type}
-                onClick={() => setSelectedType(type)}
-                className={`type-tab-btn ${selectedType === type ? 'active ' + type : ''}`}
+                key={id}
+                onClick={() => setSelectedType(id)}
+                className={`type-tab-btn ${selectedType === id ? 'active ' + id : ''}`}
               >
-                {type === 'all' && 'All Types'}
-                {type === 'expense' && 'Expenses'}
-                {type === 'income' && 'Income'}
-                {type === 'transfer' && 'Transfers'}
+                {label}
               </button>
             ))}
           </div>
@@ -335,6 +361,40 @@ export default function TransactionsView({ onOpenNewTransaction, onEditTransacti
                   const fromAcc = accounts.find((a) => a.id === tx.fromAccountId);
                   const toAcc = accounts.find((a) => a.id === tx.toAccountId);
 
+                  const isBorrow =
+                    tx.type === 'transfer' &&
+                    (tx.transferMode === 'borrow' || tx.status === 'borrowed' || tx.status === 'repaid');
+                  const isGive =
+                    tx.type === 'transfer' &&
+                    (tx.transferMode === 'give' || (tx.recipient && !tx.toAccountId && !isBorrow));
+                  const isInternal = tx.type === 'transfer' && !isBorrow && !isGive;
+
+                  let categoryLabel = cat.name;
+                  let accountLabel = acc?.name || 'Primary Account';
+
+                  if (isBorrow) {
+                    categoryLabel = 'Money Borrowed';
+                    accountLabel = tx.recipient ? `Borrowed from ${tx.recipient}` : (toAcc?.name || 'Account');
+                  } else if (isGive) {
+                    categoryLabel = tx.status === 'gift' ? 'Gift Given' : 'Money Given';
+                    accountLabel = tx.recipient
+                      ? `From ${fromAcc?.name || 'Account'} to ${tx.recipient}`
+                      : fromAcc?.name || 'Account';
+                  } else if (isInternal) {
+                    categoryLabel = 'Transfer';
+                    accountLabel = `${fromAcc?.name || 'Account'} ➔ ${toAcc?.name || 'Account'}`;
+                  }
+
+                  let amountSign = '';
+                  let amountClass = 'text-transfer';
+                  if (tx.type === 'income' || isBorrow) {
+                    amountSign = '+';
+                    amountClass = 'text-emerald';
+                  } else if (tx.type === 'expense' || isGive) {
+                    amountSign = '-';
+                    amountClass = 'text-rose';
+                  }
+
                   return (
                     <div key={tx.id} className="tx-row-item">
                       <div
@@ -350,28 +410,33 @@ export default function TransactionsView({ onOpenNewTransaction, onEditTransacti
                           {tx.note && <span className="tx-note-text">"{tx.note}"</span>}
                         </div>
                         <div className="tx-sub-line">
-                          <span className="tx-category-name">
-                            {tx.type === 'transfer' && tx.recipient ? 'Money Given' : cat.name}
-                          </span>
+                          <span className="tx-category-name">{categoryLabel}</span>
                           <span className="tx-bullet">•</span>
-                          <span className="tx-account-name">
-                            {tx.type === 'transfer'
-                              ? tx.recipient
-                                ? `From ${fromAcc?.name || 'Account'} to ${tx.recipient}`
-                                : `${fromAcc?.name || 'Account'} ➔ ${toAcc?.name || 'Account'}`
-                              : acc?.name || 'Primary Account'}
-                          </span>
-                          {tx.type === 'transfer' && tx.status === 'lent' && (
+                          <span className="tx-account-name">{accountLabel}</span>
+
+                          {/* LENT STATUS PILLS */}
+                          {isGive && tx.status === 'lent' && (
                             <span className="tx-lent-pill" title={tx.dueDate ? `Expected return by ${tx.dueDate}` : 'Awaiting return'}>
                               Lent {tx.dueDate ? `• Due ${new Date(tx.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}` : ''}
                             </span>
                           )}
-                          {tx.type === 'transfer' && tx.status === 'gift' && (
+                          {isGive && (tx.status === 'returned' || tx.status === 'cleared') && (
+                            <span className="tx-cleared-pill">Returned ✓</span>
+                          )}
+                          {isGive && tx.status === 'gift' && (
                             <span className="tx-gift-pill">Gift</span>
                           )}
-                          {tx.type === 'transfer' && tx.status === 'cleared' && (
-                            <span className="tx-cleared-pill">Returned</span>
+
+                          {/* BORROW STATUS PILLS */}
+                          {isBorrow && (tx.status === 'borrowed' || tx.status === 'unpaid') && (
+                            <span className="tx-borrow-pill" title={tx.dueDate ? `Repayment due by ${tx.dueDate}` : 'You owe this'}>
+                              Borrowed {tx.dueDate ? `• Due ${new Date(tx.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}` : ''}
+                            </span>
                           )}
+                          {isBorrow && (tx.status === 'repaid' || tx.status === 'cleared') && (
+                            <span className="tx-cleared-pill">Repaid ✓</span>
+                          )}
+
                           {tx.type !== 'transfer' && tx.status === 'pending' && (
                             <span className="tx-pending-pill">Pending</span>
                           )}
@@ -381,21 +446,36 @@ export default function TransactionsView({ onOpenNewTransaction, onEditTransacti
                       {/* Amount & Actions */}
                       <div className="tx-right-cluster">
                         <div className="tx-amount-display">
-                          <span
-                            className={`tx-amount-digits ${
-                              tx.type === 'income'
-                                ? 'text-emerald'
-                                : tx.type === 'expense'
-                                ? 'text-rose'
-                                : 'text-transfer'
-                            }`}
-                          >
-                            {tx.type === 'income' ? '+' : tx.type === 'expense' ? '-' : ''}
+                          <span className={`tx-amount-digits ${amountClass}`}>
+                            {amountSign}
                             {formatCurrency(tx.amount)}
                           </span>
                         </div>
 
                         <div className="tx-action-buttons">
+                          {isGive && tx.status === 'lent' && (
+                            <button
+                              type="button"
+                              onClick={() => editTransaction(tx.id, { ...tx, status: 'returned' })}
+                              className="btn-tx-settle"
+                              title="Mark as returned (restores account balance)"
+                            >
+                              <IconCheck size={13} stroke={2.2} />
+                              <span>Returned</span>
+                            </button>
+                          )}
+                          {isBorrow && (tx.status === 'borrowed' || tx.status === 'unpaid') && (
+                            <button
+                              type="button"
+                              onClick={() => editTransaction(tx.id, { ...tx, status: 'repaid' })}
+                              className="btn-tx-settle"
+                              title="Mark as repaid (clears debt)"
+                            >
+                              <IconCheck size={13} stroke={2.2} />
+                              <span>Repaid</span>
+                            </button>
+                          )}
+
                           <button
                             onClick={() => onEditTransaction(tx)}
                             className="btn-tx-action"

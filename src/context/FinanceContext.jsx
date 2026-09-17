@@ -93,28 +93,70 @@ export function FinanceProvider({ children }) {
     setData((prev) => ({ ...prev, theme: prev.theme === 'dark' ? 'light' : 'dark' }));
   };
 
+  // Helper to compute balance delta for any transaction
+  const getTxBalanceDelta = (tx, accId) => {
+    const amount = Number(tx.amount) || 0;
+    if (tx.type === 'expense' && tx.accountId === accId) {
+      return -amount;
+    }
+    if (tx.type === 'income' && tx.accountId === accId) {
+      return amount;
+    }
+    if (tx.type === 'transfer') {
+      const mode =
+        tx.transferMode ||
+        (tx.status === 'borrowed' || tx.status === 'repaid'
+          ? 'borrow'
+          : tx.recipient && !tx.toAccountId
+          ? 'give'
+          : 'internal');
+
+      if (mode === 'give') {
+        // Giving money to someone (Lent or Gift)
+        if (tx.fromAccountId === accId) {
+          // If lent or gift: money left account
+          if (tx.status === 'lent' || tx.status === 'gift') {
+            return -amount;
+          }
+          // If returned / cleared: money was paid back, net balance change is 0
+          if (tx.status === 'returned' || tx.status === 'cleared') {
+            return 0;
+          }
+        }
+      } else if (mode === 'borrow') {
+        // Borrowing money from someone
+        const targetAcc = tx.toAccountId || tx.accountId;
+        if (targetAcc === accId) {
+          // If borrowed (unpaid): money was received into account
+          if (tx.status === 'borrowed' || tx.status === 'unpaid') {
+            return amount;
+          }
+          // If repaid / cleared: money was paid back, net balance change is 0
+          if (tx.status === 'repaid' || tx.status === 'cleared') {
+            return 0;
+          }
+        }
+      } else {
+        // Internal transfer between own accounts
+        if (tx.fromAccountId === accId) return -amount;
+        if (tx.toAccountId === accId) return amount;
+      }
+    }
+    return 0;
+  };
+
   // ----------------- TRANSACTIONS -----------------
   const addTransaction = (txData) => {
-    const id = 'tx_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+    const id = txData.id || ('tx_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7));
     const newTx = { ...txData, id };
 
     setData((prev) => {
       // Update account balances
       const updatedAccounts = prev.accounts.map((acc) => {
-        let balanceChange = 0;
-        if (newTx.type === 'expense' && acc.id === newTx.accountId) {
-          balanceChange = -Number(newTx.amount);
-        } else if (newTx.type === 'income' && acc.id === newTx.accountId) {
-          balanceChange = Number(newTx.amount);
-        } else if (newTx.type === 'transfer') {
-          if (acc.id === newTx.fromAccountId) balanceChange = -Number(newTx.amount);
-          if (newTx.toAccountId && acc.id === newTx.toAccountId) {
-            balanceChange = Number(newTx.amount);
-          }
-        }
+        const delta = getTxBalanceDelta(newTx, acc.id);
         return {
           ...acc,
-          balance: Number((acc.balance + balanceChange).toFixed(2)),
+          balance: Number((acc.balance + delta).toFixed(2)),
         };
       });
 
@@ -134,20 +176,10 @@ export function FinanceProvider({ children }) {
 
       // Revert account balances
       const updatedAccounts = prev.accounts.map((acc) => {
-        let revertChange = 0;
-        if (txToDelete.type === 'expense' && acc.id === txToDelete.accountId) {
-          revertChange = Number(txToDelete.amount);
-        } else if (txToDelete.type === 'income' && acc.id === txToDelete.accountId) {
-          revertChange = -Number(txToDelete.amount);
-        } else if (txToDelete.type === 'transfer') {
-          if (acc.id === txToDelete.fromAccountId) revertChange = Number(txToDelete.amount);
-          if (txToDelete.toAccountId && acc.id === txToDelete.toAccountId) {
-            revertChange = -Number(txToDelete.amount);
-          }
-        }
+        const revertDelta = -getTxBalanceDelta(txToDelete, acc.id);
         return {
           ...acc,
-          balance: Number((acc.balance + revertChange).toFixed(2)),
+          balance: Number((acc.balance + revertDelta).toFixed(2)),
         };
       });
 
@@ -160,8 +192,31 @@ export function FinanceProvider({ children }) {
   };
 
   const editTransaction = (id, updatedFields) => {
-    deleteTransaction(id);
-    addTransaction({ ...updatedFields, id });
+    setData((prev) => {
+      const oldTx = prev.transactions.find((t) => t.id === id);
+      if (!oldTx) return prev;
+
+      const newTx = { ...oldTx, ...updatedFields, id };
+
+      // Compute net delta for each account by reverting old transaction and applying new transaction
+      const updatedAccounts = prev.accounts.map((acc) => {
+        const revertOldDelta = -getTxBalanceDelta(oldTx, acc.id);
+        const applyNewDelta = getTxBalanceDelta(newTx, acc.id);
+        const netDelta = revertOldDelta + applyNewDelta;
+        return {
+          ...acc,
+          balance: Number((acc.balance + netDelta).toFixed(2)),
+        };
+      });
+
+      const updatedTransactions = prev.transactions.map((t) => (t.id === id ? newTx : t));
+
+      return {
+        ...prev,
+        accounts: updatedAccounts,
+        transactions: updatedTransactions,
+      };
+    });
   };
 
   // ----------------- ACCOUNTS -----------------
@@ -177,6 +232,7 @@ export function FinanceProvider({ children }) {
       ...prev,
       accounts: [...prev.accounts, newAccount],
     }));
+    return newAccount;
   };
 
   const editAccount = (id, fields) => {
@@ -363,17 +419,48 @@ export function FinanceProvider({ children }) {
   const includedAccountIds = new Set(includedAccounts.map((a) => a.id));
 
   // Net Worth (Assets - Liabilities)
-  const totalBalance = includedAccounts.reduce((sum, acc) => sum + Number(acc.balance), 0);
-  const totalAssets = includedAccounts
-    .filter((a) => a.balance > 0)
-    .reduce((sum, acc) => sum + Number(acc.balance), 0);
-  const totalDebt = includedAccounts
+  const accountsDebt = includedAccounts
     .filter((a) => a.balance < 0)
     .reduce((sum, acc) => sum + Math.abs(Number(acc.balance)), 0);
 
+  // Active borrowed money from others (you owe them repayment)
+  const borrowedDebt = data.transactions
+    .filter((tx) => {
+      const isBorrow =
+        tx.type === 'transfer' &&
+        (tx.transferMode === 'borrow' || tx.status === 'borrowed' || tx.status === 'repaid');
+      const targetAccId = tx.toAccountId || tx.accountId;
+      if (targetAccId && !includedAccountIds.has(targetAccId)) return false;
+      return isBorrow && (tx.status === 'borrowed' || tx.status === 'unpaid');
+    })
+    .reduce((sum, tx) => sum + Number(tx.amount), 0);
+
+  const totalDebt = Number((accountsDebt + borrowedDebt).toFixed(2));
+
+  // Active money lent to others (they owe you return)
+  const totalLent = data.transactions
+    .filter((tx) => {
+      const isLend =
+        tx.type === 'transfer' &&
+        (tx.transferMode === 'give' || (!tx.transferMode && tx.recipient && !tx.toAccountId));
+      const fromAccId = tx.fromAccountId || tx.accountId;
+      if (fromAccId && !includedAccountIds.has(fromAccId)) return false;
+      return isLend && tx.status === 'lent';
+    })
+    .reduce((sum, tx) => sum + Number(tx.amount), 0);
+
+  const totalAssets = Number(
+    includedAccounts
+      .filter((a) => a.balance > 0)
+      .reduce((sum, acc) => sum + Number(acc.balance), 0)
+      .toFixed(2)
+  );
+
+  const totalBalance = Number((totalAssets - totalDebt).toFixed(2));
+
   // Current month transactions calculation (only for included accounts)
   const currentMonthTransactions = data.transactions.filter((tx) => {
-    const linkedAccId = tx.accountId || tx.fromAccountId;
+    const linkedAccId = tx.accountId || tx.fromAccountId || tx.toAccountId;
     if (linkedAccId && !includedAccountIds.has(linkedAccId)) {
       return false;
     }
@@ -431,6 +518,8 @@ export function FinanceProvider({ children }) {
     totalBalance,
     totalAssets,
     totalDebt,
+    borrowedDebt,
+    totalLent,
     currentMonthIncome,
     currentMonthExpense,
     currentMonthSavings,
