@@ -39,6 +39,14 @@ export function FinanceProvider({ children }) {
         if (!parsed.currency || !['BDT', 'USD'].includes(parsed.currency)) {
           parsed.currency = 'BDT';
         }
+        if (!parsed.categories || !Array.isArray(parsed.categories) || parsed.categories.length === 0) {
+          parsed.categories = CATEGORIES;
+        }
+        if (!Array.isArray(parsed.accounts)) parsed.accounts = [];
+        if (!Array.isArray(parsed.transactions)) parsed.transactions = [];
+        if (!Array.isArray(parsed.budgets)) parsed.budgets = [];
+        if (!Array.isArray(parsed.planned)) parsed.planned = [];
+        if (!Array.isArray(parsed.goals)) parsed.goals = [];
         return parsed;
       }
     } catch (e) {

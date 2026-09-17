@@ -36,13 +36,13 @@
   --phantom-mint: #30E0A1;
   --phantom-mint-light: #5AF0BA;
   --phantom-mint-glow: transparent;
-  --income-color: #30E0A1;
+  --income-color: var(--mint-text);
   --income-bg: rgba(48, 224, 161, 0.12);
 
   --phantom-coral: #FF5C5C;
   --phantom-coral-light: #FF7E7E;
   --phantom-coral-glow: transparent;
-  --expense-color: #FF5C5C;
+  --expense-color: var(--coral-text-strong);
   --expense-bg: rgba(255, 92, 92, 0.12);
 
   --phantom-blue: #38BDF8;
@@ -53,6 +53,17 @@
   --phantom-gold: #F7931A; /* Bitcoin Gold */
   --phantom-sol: #9945FF;  /* Solana Purple */
   --phantom-eth: #627EEA;  /* Ethereum Blue */
+
+  /* Text-safe accent tokens: identical to the vivid brand colors in dark mode
+     (zero visual change), but re-tuned per-theme below so accent TEXT always
+     meets WCAG AA contrast against its surface. Solid fills (dots, buttons,
+     active pills) keep using the vivid --phantom-* tokens directly. */
+  --mint-text: var(--phantom-mint);
+  --coral-text: var(--phantom-coral-light);
+  --coral-text-strong: var(--phantom-coral);
+  --purple-text: var(--phantom-purple);
+  --amber-text: var(--phantom-amber);
+  --border-color: rgba(255, 255, 255, 0.08);
 
   /* Typography: Highly readable Modern Geometric Neo-Grotesque Onest & Apple SF Pro */
   --font-heading: 'Onest', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", "Segoe UI", Roboto, sans-serif;
@@ -104,8 +115,19 @@
 
   --text-primary: #101014;
   --text-secondary: #5A5A6E;
-  --text-muted: #8E8E9E;
+  --text-muted: #65657A;
   --text-inverse: #FFFFFF;
+
+  /* Deepened accent text tokens — the vivid dark-mode brand hexes (mint,
+     coral, purple, amber) drop below WCAG AA (4.5:1) on light surfaces, so
+     light mode gets darker, more saturated variants of the same hues.
+     Solid fills keep using --phantom-* directly and stay vivid. */
+  --mint-text: #0B8457;
+  --coral-text: #DC2626;
+  --coral-text-strong: #DC2626;
+  --purple-text: #7C3AED;
+  --amber-text: #B45309;
+  --border-color: rgba(16, 16, 20, 0.08);
 
   --shadow-sm: none;
   --shadow-md: 0 8px 20px -4px rgba(16, 16, 20, 0.08);
@@ -122,6 +144,45 @@
   --track-bg: #D4D4E0;
   --card-outline-selected: #101014;
 }
+
+/* ===========================================================
+   LIGHT THEME — Surface Overlay Overrides
+   The rules above use translucent WHITE overlays for subtle
+   chip/pill/track backgrounds, tuned for dark surfaces. On
+   light surfaces a white overlay is invisible, so light mode
+   swaps in an equivalent-weight dark tint instead.
+   =========================================================== */
+[data-theme="light"] .glass-card-interactive:hover { background: rgba(16, 16, 20, 0.06); }
+[data-theme="light"] .badge-neutral { background: rgba(16, 16, 20, 0.06); }
+[data-theme="light"] .progress-bar-bg { background: rgba(16, 16, 20, 0.055); }
+[data-theme="light"] .nav-item:hover { background: rgba(16, 16, 20, 0.05); }
+[data-theme="light"] .credit-progress-bar { background: rgba(16, 16, 20, 0.06); }
+[data-theme="light"] .legend-item:hover, [data-theme="light"] .legend-item.active-legend { background: rgba(16, 16, 20, 0.05); }
+[data-theme="light"] .legend-bar-track { background: rgba(16, 16, 20, 0.06); }
+[data-theme="light"] .tx-row-item:hover { background: rgba(16, 16, 20, 0.04); }
+[data-theme="light"] .btn-card-action { background: rgba(16, 16, 20, 0.04); }
+[data-theme="light"] .btn-card-action:hover { background: rgba(16, 16, 20, 0.08); }
+[data-theme="light"] .tx-type-btn:hover { background: rgba(16, 16, 20, 0.06); }
+[data-theme="light"] .cat-pill-item:hover { background: rgba(16, 16, 20, 0.06); }
+[data-theme="light"] .btn-spectrum-trigger { background: rgba(16, 16, 20, 0.06); }
+[data-theme="light"] .btn-spectrum-trigger:hover { background: rgba(16, 16, 20, 0.12); }
+[data-theme="light"] .card-excluded-badge { background: rgba(16, 16, 20, 0.06); }
+[data-theme="light"] .category-dropdown-trigger:hover { background: rgba(16, 16, 20, 0.06); }
+[data-theme="light"] .cat-dropdown-item:hover { background: rgba(16, 16, 20, 0.055); }
+[data-theme="light"] .transfer-sub-btn:hover { background: rgba(16, 16, 20, 0.05); }
+[data-theme="light"] .quick-due-presets button { background: rgba(16, 16, 20, 0.06); }
+[data-theme="light"] .quick-due-presets button:hover { background: rgba(16, 16, 20, 0.13); }
+[data-theme="light"] .modal-delete-btn:hover { background: rgba(16, 16, 20, 0.05); }
+[data-theme="light"] .modal-delete-btn:active { background: rgba(16, 16, 20, 0.08); }
+[data-theme="light"] .more-sheet-item { background: rgba(16, 16, 20, 0.04); }
+[data-theme="light"] .hero-change-pill { background: rgba(16, 16, 20, 0.05); }
+[data-theme="light"] .floating-dock-btn.is-expanded { background: rgba(16, 16, 20, 0.06); }
+[data-theme="light"] .dock-kbd-hint { background: rgba(16, 16, 20, 0.06); }
+[data-theme="light"] .mobile-quick-action-item:active { background: rgba(16, 16, 20, 0.06); }
+[data-theme="light"] .heatmap-nav-arrows { background: rgba(16, 16, 20, 0.05); }
+[data-theme="light"] .heatmap-nav-arrow-btn:hover { background: rgba(16, 16, 20, 0.08); }
+[data-theme="light"] .inspector-tx-row { background: rgba(16, 16, 20, 0.035); }
+[data-theme="light"] .inspector-tx-row:hover { background: rgba(16, 16, 20, 0.05); }
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -343,7 +404,7 @@ input:focus, select:focus, textarea:focus {
 
 .btn-danger {
   background: rgba(255, 92, 92, 0.14);
-  color: var(--phantom-coral-light);
+  color: var(--coral-text);
   border: none;
   border-radius: var(--radius-full);
 }
@@ -367,7 +428,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .btn-icon:hover {
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   background: var(--bg-card-hover);
 }
 
@@ -397,7 +458,7 @@ input:focus, select:focus, textarea:focus {
 
 .badge-transfer {
   background: var(--phantom-purple-bg);
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   border: none;
 }
 
@@ -517,7 +578,7 @@ input:focus, select:focus, textarea:focus {
   font-weight: 600;
   padding: 2px 7px;
   border-radius: var(--radius-full);
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   letter-spacing: 0.05em;
 }
 
@@ -600,7 +661,7 @@ input:focus, select:focus, textarea:focus {
 
 .nav-item.active {
   background: rgba(171, 159, 242, 0.12);
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   border: none;
   font-weight: 600;
 }
@@ -637,7 +698,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .btn-demo-reset:hover {
-  color: var(--phantom-coral-light);
+  color: var(--coral-text);
   background: rgba(255, 92, 92, 0.08);
 }
 
@@ -704,7 +765,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .currency-icon {
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   margin-right: 6px;
 }
 
@@ -996,7 +1057,7 @@ input:focus, select:focus, textarea:focus {
 
 .fin-card:hover .fin-card-view-hint {
   opacity: 1;
-  color: var(--phantom-purple);
+  color: var(--purple-text);
 }
 
 /* Credit Card Utilization Bar */
@@ -1060,7 +1121,7 @@ input:focus, select:focus, textarea:focus {
   height: 36px;
   border-radius: 50%;
   background: rgba(171, 159, 242, 0.12);
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1208,11 +1269,11 @@ input:focus, select:focus, textarea:focus {
 }
 
 .metric-icon-pos {
-  color: var(--phantom-mint);
+  color: var(--mint-text);
 }
 
 .metric-icon-neg {
-  color: var(--phantom-coral-light);
+  color: var(--coral-text);
 }
 
 .metric-note {
@@ -1422,7 +1483,7 @@ input:focus, select:focus, textarea:focus {
   gap: 4px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   padding: 4px 10px;
   border-radius: var(--radius-full);
   transition: all var(--transition-fast);
@@ -1526,7 +1587,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .chart-empty-icon {
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   opacity: 1;
 }
 
@@ -1784,9 +1845,9 @@ input:focus, select:focus, textarea:focus {
   padding: 2px 6px;
   border-radius: var(--radius-full);
 }
-.type-badge-mini.income { background: rgba(48, 224, 161, 0.15); color: var(--phantom-mint); }
-.type-badge-mini.expense { background: rgba(255, 92, 92, 0.15); color: var(--phantom-coral-light); }
-.type-badge-mini.transfer { background: rgba(171, 159, 242, 0.15); color: var(--phantom-purple); }
+.type-badge-mini.income { background: rgba(48, 224, 161, 0.15); color: var(--mint-text); }
+.type-badge-mini.expense { background: rgba(255, 92, 92, 0.15); color: var(--coral-text); }
+.type-badge-mini.transfer { background: rgba(171, 159, 242, 0.15); color: var(--purple-text); }
 
 /* =========================================================
    BUDGETS & GOALS WIDGETS
@@ -1859,9 +1920,9 @@ input:focus, select:focus, textarea:focus {
   font-size: 0.725rem;
 }
 
-.budget-status-label.over { color: var(--phantom-coral-light); display: inline-flex; align-items: center; gap: 4px; }
-.budget-status-label.warn { color: var(--phantom-amber); }
-.budget-status-label.ok { color: var(--phantom-mint); display: inline-flex; align-items: center; gap: 4px; }
+.budget-status-label.over { color: var(--coral-text); display: inline-flex; align-items: center; gap: 4px; }
+.budget-status-label.warn { color: var(--amber-text); }
+.budget-status-label.ok { color: var(--mint-text); display: inline-flex; align-items: center; gap: 4px; }
 
 /* Goals Widget */
 .goals-widget-grid {
@@ -1924,7 +1985,7 @@ input:focus, select:focus, textarea:focus {
 .goal-percent-pill {
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--phantom-purple);
+  color: var(--purple-text);
 }
 
 .goal-values-row {
@@ -2008,11 +2069,11 @@ input:focus, select:focus, textarea:focus {
   color: var(--text-secondary);
 }
 
-.type-tab-btn.active.all { background: var(--phantom-purple-bg); color: var(--phantom-purple); }
-.type-tab-btn.active.expense { background: rgba(255, 92, 92, 0.2); color: var(--phantom-coral-light); }
-.type-tab-btn.active.income { background: rgba(48, 224, 161, 0.2); color: var(--phantom-mint); }
+.type-tab-btn.active.all { background: var(--phantom-purple-bg); color: var(--purple-text); }
+.type-tab-btn.active.expense { background: rgba(255, 92, 92, 0.2); color: var(--coral-text); }
+.type-tab-btn.active.income { background: rgba(48, 224, 161, 0.2); color: var(--mint-text); }
 .type-tab-btn.active.peer { background: rgba(245, 158, 11, 0.2); color: #FBBF24; }
-.type-tab-btn.active.transfer { background: rgba(171, 159, 242, 0.2); color: var(--phantom-purple); }
+.type-tab-btn.active.transfer { background: rgba(171, 159, 242, 0.2); color: var(--purple-text); }
 
 .filter-select-wrapper {
   position: relative;
@@ -2185,7 +2246,7 @@ input:focus, select:focus, textarea:focus {
   font-size: 0.65rem;
   padding: 1px 6px;
   background: rgba(245, 158, 11, 0.15);
-  color: var(--phantom-amber);
+  color: var(--amber-text);
   border-radius: 4px;
 }
 
@@ -2225,7 +2286,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .btn-tx-action.delete:hover {
-  color: var(--phantom-coral);
+  color: var(--coral-text-strong);
   background: rgba(255, 92, 92, 0.1);
 }
 
@@ -2431,7 +2492,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .btn-card-action.delete:hover {
-  color: var(--phantom-coral);
+  color: var(--coral-text-strong);
   background: rgba(255, 92, 92, 0.15);
 }
 
@@ -2500,7 +2561,7 @@ input:focus, select:focus, textarea:focus {
 .burn-label {
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   text-transform: uppercase;
 }
 
@@ -2606,8 +2667,8 @@ input:focus, select:focus, textarea:focus {
   gap: 5px;
   font-weight: 600;
 }
-.status-msg.safe { color: var(--phantom-mint); }
-.status-msg.over { color: var(--phantom-coral-light); }
+.status-msg.safe { color: var(--mint-text); }
+.status-msg.over { color: var(--coral-text); }
 
 .daily-allowance-tag {
   color: var(--text-muted);
@@ -2755,7 +2816,7 @@ input:focus, select:focus, textarea:focus {
   gap: 5px;
   font-size: 0.725rem;
   font-weight: 600;
-  color: var(--phantom-purple);
+  color: var(--purple-text);
 }
 
 .planned-card-actions {
@@ -2768,7 +2829,7 @@ input:focus, select:focus, textarea:focus {
   font-size: 0.75rem;
   padding: 5px 12px;
   background: var(--phantom-purple-bg);
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   border: none;
   border-radius: var(--radius-full);
 }
@@ -2839,7 +2900,7 @@ input:focus, select:focus, textarea:focus {
   margin-top: 5px;
   color: var(--text-secondary);
 }
-.percent-text { font-weight: 600; color: var(--phantom-purple); }
+.percent-text { font-weight: 600; color: var(--purple-text); }
 
 .goals-cards-grid {
   display: grid;
@@ -2913,14 +2974,14 @@ input:focus, select:focus, textarea:focus {
   margin-top: 5px;
 }
 
-.percent-bold { font-weight: 600; color: var(--phantom-purple); }
+.percent-bold { font-weight: 600; color: var(--purple-text); }
 .goal-remaining-text { color: var(--text-muted); }
 
 .goal-complete-badge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: var(--phantom-mint);
+  color: var(--mint-text);
   font-weight: 600;
 }
 
@@ -2988,7 +3049,7 @@ input:focus, select:focus, textarea:focus {
   font-family: var(--font-heading);
   font-size: 1.15rem;
   font-weight: 600;
-  color: var(--phantom-purple);
+  color: var(--purple-text);
 }
 
 .analytics-title {
@@ -3301,17 +3362,17 @@ input:focus, select:focus, textarea:focus {
 
 .tx-type-btn.active.expense {
   background: rgba(255, 92, 92, 0.16);
-  color: var(--phantom-coral-light);
+  color: var(--coral-text);
 }
 
 .tx-type-btn.active.income {
   background: rgba(48, 224, 161, 0.16);
-  color: var(--phantom-mint);
+  color: var(--mint-text);
 }
 
 .tx-type-btn.active.transfer {
   background: rgba(171, 159, 242, 0.16);
-  color: var(--phantom-purple);
+  color: var(--purple-text);
 }
 
 .tx-form {
@@ -3437,7 +3498,7 @@ select.modal-select option,
   font-family: var(--font-heading);
   font-size: 2.2rem;
   font-weight: 600;
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   margin-right: 10px;
   line-height: 1;
 }
@@ -3526,7 +3587,7 @@ select.modal-select option,
   gap: 5px;
   font-size: 0.76rem;
   font-weight: 600;
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -4036,17 +4097,17 @@ select.modal-select option,
 
 .transfer-sub-btn.active.give {
   background: rgba(255, 92, 92, 0.16);
-  color: var(--phantom-coral-light);
+  color: var(--coral-text);
 }
 
 .transfer-sub-btn.active.borrow {
   background: rgba(48, 224, 161, 0.16);
-  color: var(--phantom-mint);
+  color: var(--mint-text);
 }
 
 .transfer-sub-btn.active.internal {
   background: rgba(171, 159, 242, 0.16);
-  color: var(--phantom-purple);
+  color: var(--purple-text);
 }
 
 .transfer-helper-banner {
@@ -4056,7 +4117,7 @@ select.modal-select option,
   padding: 8px 14px;
   border-radius: var(--radius-md);
   background: rgba(255, 92, 92, 0.08);
-  color: var(--phantom-coral-light);
+  color: var(--coral-text);
   font-size: 0.76rem;
   font-weight: 500;
   line-height: 1.35;
@@ -4064,12 +4125,12 @@ select.modal-select option,
 
 .transfer-helper-banner.borrow {
   background: rgba(48, 224, 161, 0.08);
-  color: var(--phantom-mint);
+  color: var(--mint-text);
 }
 
 .transfer-helper-banner.internal {
   background: rgba(171, 159, 242, 0.08);
-  color: var(--phantom-purple);
+  color: var(--purple-text);
 }
 
 .form-label-with-presets {
@@ -4141,7 +4202,7 @@ select.modal-select option,
   padding: 2px 8px;
   border-radius: var(--radius-full);
   background: rgba(48, 224, 161, 0.15);
-  color: var(--phantom-mint);
+  color: var(--mint-text);
 }
 
 .tx-gift-pill {
@@ -4150,7 +4211,7 @@ select.modal-select option,
   padding: 2px 8px;
   border-radius: var(--radius-full);
   background: rgba(171, 159, 242, 0.15);
-  color: var(--phantom-purple);
+  color: var(--purple-text);
 }
 
 .tx-cleared-pill {
@@ -4159,7 +4220,7 @@ select.modal-select option,
   padding: 2px 8px;
   border-radius: var(--radius-full);
   background: rgba(48, 224, 161, 0.15);
-  color: var(--phantom-mint);
+  color: var(--mint-text);
 }
 
 .btn-tx-settle {
@@ -4172,7 +4233,7 @@ select.modal-select option,
   border-radius: var(--radius-full);
   border: none !important;
   background: rgba(48, 224, 161, 0.12);
-  color: var(--phantom-mint);
+  color: var(--mint-text);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
@@ -4184,7 +4245,7 @@ select.modal-select option,
 
 .type-badge-mini.borrow {
   background: rgba(48, 224, 161, 0.14);
-  color: var(--phantom-mint);
+  color: var(--mint-text);
 }
 
 .type-badge-mini.lend {
@@ -4310,7 +4371,7 @@ select.modal-select option,
 }
 
 .mobile-nav-btn.active {
-  color: var(--phantom-purple);
+  color: var(--purple-text);
 }
 
 .mobile-nav-btn svg {
@@ -4482,7 +4543,7 @@ select.modal-select option,
   width: 100%;
   padding: 10px 14px;
   background: rgba(255, 92, 92, 0.08);
-  color: var(--phantom-coral-light);
+  color: var(--coral-text);
   border: none;
   border-radius: var(--radius-full);
   font-size: 0.8rem;
@@ -4491,10 +4552,10 @@ select.modal-select option,
 }
 
 /* Utility classes */
-.text-emerald { color: var(--phantom-mint) !important; }
-.text-rose { color: var(--phantom-coral-light) !important; }
-.text-indigo { color: var(--phantom-purple) !important; }
-.text-transfer { color: var(--phantom-purple) !important; }
+.text-emerald { color: var(--mint-text) !important; }
+.text-rose { color: var(--coral-text) !important; }
+.text-indigo { color: var(--purple-text) !important; }
+.text-transfer { color: var(--purple-text) !important; }
 .mb-2 { margin-bottom: 8px; }
 .mt-3 { margin-top: 10px; }
 
@@ -4552,7 +4613,7 @@ select.modal-select option,
 
 .phantom-chip-addr {
   font-size: 0.725rem;
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   font-family: monospace;
 }
 
@@ -4562,7 +4623,7 @@ select.modal-select option,
 }
 
 .phantom-account-chip:hover .phantom-copy-icon {
-  color: var(--phantom-purple);
+  color: var(--purple-text);
 }
 
 .phantom-copied-badge {
@@ -4571,7 +4632,7 @@ select.modal-select option,
   gap: 3px;
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--phantom-mint);
+  color: var(--mint-text);
   background: rgba(48, 224, 161, 0.18);
   padding: 2px 7px;
   border-radius: var(--radius-full);
@@ -4601,18 +4662,18 @@ select.modal-select option,
 
 .hero-change-pill.pos {
   background: rgba(48, 224, 161, 0.1);
-  color: var(--phantom-mint);
+  color: var(--mint-text);
 }
 
 .hero-change-pill.neg {
   background: rgba(255, 92, 92, 0.1);
-  color: var(--phantom-coral-light);
+  color: var(--coral-text);
 }
 
 /* Phantom 4 Core Action Buttons */
 .pill-deposit {
   background: rgba(48, 224, 161, 0.12);
-  color: var(--phantom-mint);
+  color: var(--mint-text);
 }
 
 .pill-deposit:hover {
@@ -4624,7 +4685,7 @@ select.modal-select option,
 
 .pill-send {
   background: rgba(255, 92, 92, 0.12);
-  color: var(--phantom-coral-light);
+  color: var(--coral-text);
 }
 
 .pill-send:hover {
@@ -4650,7 +4711,7 @@ select.modal-select option,
 
 .pill-swap {
   background: rgba(171, 159, 242, 0.14);
-  color: var(--phantom-purple);
+  color: var(--purple-text);
 }
 
 .pill-swap:hover {
@@ -4687,7 +4748,7 @@ select.modal-select option,
 .accounts-count-tag {
   font-size: 0.72rem;
   font-weight: 600;
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   background: rgba(171, 159, 242, 0.12);
   padding: 2px 8px;
   border-radius: var(--radius-full);
@@ -4707,7 +4768,7 @@ select.modal-select option,
 }
 
 .btn-link-view-all:hover {
-  color: var(--phantom-purple);
+  color: var(--purple-text);
 }
 
 .accounts-pill-grid {
@@ -4806,7 +4867,7 @@ select.modal-select option,
 /* Card Limit Note for Credit Cards */
 .card-limit-note {
   font-size: 0.72rem;
-  color: var(--phantom-coral-light);
+  color: var(--coral-text);
   margin-top: 4px;
 }
 
@@ -4881,7 +4942,7 @@ select.modal-select option,
 }
 
 .btn-link-action.highlight {
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   font-weight: 600;
   font-size: 0.82rem;
   display: inline-flex;
@@ -5121,7 +5182,7 @@ select.modal-select option,
 /* Specific Button Themes */
 .dock-expense .dock-icon-box {
   background: rgba(244, 63, 94, 0.12);
-  color: var(--phantom-coral-light);
+  color: var(--coral-text);
 }
 .dock-expense:hover .dock-icon-box {
   background: rgba(244, 63, 94, 0.22);
@@ -5129,7 +5190,7 @@ select.modal-select option,
 
 .dock-income .dock-icon-box {
   background: rgba(48, 224, 161, 0.12);
-  color: var(--phantom-mint);
+  color: var(--mint-text);
 }
 .dock-income:hover .dock-icon-box {
   background: rgba(48, 224, 161, 0.22);
@@ -5137,7 +5198,7 @@ select.modal-select option,
 
 .dock-transfer .dock-icon-box {
   background: rgba(171, 159, 242, 0.14);
-  color: var(--phantom-purple);
+  color: var(--purple-text);
 }
 .dock-transfer:hover .dock-icon-box {
   background: rgba(171, 159, 242, 0.24);
@@ -5296,17 +5357,17 @@ select.modal-select option,
 
 .mobile-quick-icon-box.expense {
   background: rgba(244, 63, 94, 0.15);
-  color: var(--phantom-coral-light);
+  color: var(--coral-text);
 }
 
 .mobile-quick-icon-box.income {
   background: rgba(48, 224, 161, 0.15);
-  color: var(--phantom-mint);
+  color: var(--mint-text);
 }
 
 .mobile-quick-icon-box.transfer {
   background: rgba(171, 159, 242, 0.18);
-  color: var(--phantom-purple);
+  color: var(--purple-text);
 }
 
 .mobile-quick-label {
@@ -5860,7 +5921,7 @@ select.modal-select option,
 
 .tx-view-pill.active {
   background: var(--phantom-purple-bg);
-  color: var(--phantom-purple);
+  color: var(--purple-text);
   font-weight: 700;
 }
 

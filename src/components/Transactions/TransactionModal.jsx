@@ -21,14 +21,17 @@ export default function TransactionModal({
 }) {
   const { shouldRender, isClosing } = useModalAnimation(isOpen);
   const {
-    accounts,
-    categories,
+    accounts: rawAccounts,
+    categories: rawCategories,
     currentCurrency,
     addTransaction,
     editTransaction,
     deleteTransaction,
     addAccount,
   } = useFinance();
+
+  const accounts = Array.isArray(rawAccounts) ? rawAccounts : [];
+  const categories = Array.isArray(rawCategories) ? rawCategories : [];
 
   const [type, setType] = useState(initialType);
   const [transferMode, setTransferMode] = useState('give'); // 'give' | 'borrow' | 'internal'
@@ -107,8 +110,8 @@ export default function TransactionModal({
       setFromAccountId(defaultAcc);
       setToAccountId(defaultToAcc);
 
-      const defaultCat = categories.find((c) => c.type === resolvedType);
-      setCategoryId(defaultCat ? defaultCat.id : categories[0]?.id || '');
+      const defaultCat = categories?.find ? categories.find((c) => c.type === resolvedType) : null;
+      setCategoryId(defaultCat ? defaultCat.id : categories?.[0]?.id || '');
 
       setRecipient('');
       setPayee('');
@@ -127,7 +130,7 @@ export default function TransactionModal({
 
   if (!shouldRender) return null;
 
-  const filteredCategories = categories.filter((c) => c.type === (type === 'income' ? 'income' : 'expense'));
+  const filteredCategories = (categories || []).filter((c) => c.type === (type === 'income' ? 'income' : 'expense'));
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -173,7 +176,7 @@ export default function TransactionModal({
         payload.recipient = recipient.trim();
         payload.dueDate = dueDate || null;
         payload.payee = `Given to ${recipient.trim()}`;
-        const fallbackCat = categories.find((c) => c.id === 'cat_other_exp') || categories[0];
+        const fallbackCat = (categories || []).find((c) => c.id === 'cat_other_exp') || categories?.[0];
         payload.categoryId = fallbackCat ? fallbackCat.id : 'cat_other_exp';
       } else if (transferMode === 'borrow') {
         payload.fromAccountId = null;
@@ -182,7 +185,7 @@ export default function TransactionModal({
         payload.recipient = recipient.trim();
         payload.dueDate = dueDate || null;
         payload.payee = `Borrowed from ${recipient.trim()}`;
-        const fallbackCat = categories.find((c) => c.id === 'cat_other_inc') || categories[0];
+        const fallbackCat = (categories || []).find((c) => c.id === 'cat_other_inc') || categories?.[0];
         payload.categoryId = fallbackCat ? fallbackCat.id : 'cat_other_inc';
       } else {
         // Internal transfer
@@ -194,13 +197,13 @@ export default function TransactionModal({
         const fromAccName = accounts.find((a) => a.id === payload.fromAccountId)?.name || 'Account';
         const toAccName = accounts.find((a) => a.id === payload.toAccountId)?.name || 'Account';
         payload.payee = `Transfer: ${fromAccName} ➔ ${toAccName}`;
-        const fallbackCat = categories.find((c) => c.id === 'cat_other_exp') || categories[0];
+        const fallbackCat = (categories || []).find((c) => c.id === 'cat_other_exp') || categories?.[0];
         payload.categoryId = fallbackCat ? fallbackCat.id : 'cat_other_exp';
       }
     } else {
       payload.accountId = accountId || (accounts[0] ? accounts[0].id : '');
       payload.categoryId = categoryId || (categories[0] ? categories[0].id : '');
-      payload.payee = payee.trim() || (categories.find((c) => c.id === payload.categoryId)?.name || 'General');
+      payload.payee = payee.trim() || ((categories || []).find((c) => c.id === payload.categoryId)?.name || 'General');
     }
 
     if (editTx) {

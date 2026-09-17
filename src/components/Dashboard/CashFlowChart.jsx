@@ -271,7 +271,7 @@ export default function CashFlowChart() {
                       cy={yInc}
                       r="5"
                       fill="#30E0A1"
-                      stroke="#08080C"
+                      stroke="var(--bg-card)"
                       strokeWidth="2.5"
                     />
                   )}
@@ -283,7 +283,7 @@ export default function CashFlowChart() {
                       cy={yExp}
                       r="5"
                       fill="#FF5C5C"
-                      stroke="#08080C"
+                      stroke="var(--bg-card)"
                       strokeWidth="2.5"
                     />
                   )}
