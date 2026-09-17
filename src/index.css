@@ -3333,9 +3333,14 @@ input:focus, select:focus, textarea:focus {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-secondary);
-  display: block;
+  display: flex;
+  align-items: center;
   letter-spacing: 0.01em;
   user-select: none;
+  min-height: 20px;
+  line-height: 20px;
+  margin: 0;
+  white-space: nowrap;
 }
 
 .form-row {
@@ -4072,30 +4077,53 @@ select.modal-select option,
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  min-height: 20px;
+  height: 20px;
+  line-height: 20px;
+  margin: 0;
+}
+
+.form-label-with-presets label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.01em;
+  user-select: none;
+  white-space: nowrap;
+  margin: 0;
+  padding: 0;
 }
 
 .quick-due-presets {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
+  flex-shrink: 0;
 }
 
 .quick-due-presets button {
   border: none !important;
   outline: none !important;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--text-secondary);
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 600;
-  padding: 2px 7px;
+  padding: 1px 6px;
+  height: 18px;
+  line-height: 16px;
   border-radius: var(--radius-full);
   cursor: pointer;
   transition: all var(--transition-fast);
+  white-space: nowrap;
 }
 
 .quick-due-presets button:hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.16);
   color: var(--text-primary);
+}
+
+.quick-due-presets button:active {
+  transform: scale(0.95);
 }
 
 .tx-lent-pill {

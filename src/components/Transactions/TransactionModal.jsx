@@ -303,7 +303,7 @@ export default function TransactionModal({
                 }}
               >
                 <IconPlus size={15} stroke={2} />
-                <span>+ Primary Bank Account ($0.00)</span>
+                <span>+ Primary Bank Account ({currentCurrency.symbol}0.00)</span>
               </button>
               <button
                 type="button"
@@ -324,7 +324,7 @@ export default function TransactionModal({
                 }}
               >
                 <IconPlus size={15} stroke={2} />
-                <span>+ Cash Wallet ($0.00)</span>
+                <span>+ Cash Wallet ({currentCurrency.symbol}0.00)</span>
               </button>
             </div>
           </div>
@@ -448,7 +448,7 @@ export default function TransactionModal({
 
                       <div className="form-group">
                         <div className="form-label-with-presets">
-                          <label>Expected Return Date</label>
+                          <label>Due Date</label>
                           <div className="quick-due-presets">
                             <button type="button" onClick={() => setDueDate(getFutureDate(date, 7))}>+7d</button>
                             <button type="button" onClick={() => setDueDate(getFutureDate(date, 14))}>+14d</button>
@@ -547,7 +547,7 @@ export default function TransactionModal({
 
                       <div className="form-group">
                         <div className="form-label-with-presets">
-                          <label>Repayment Due Date</label>
+                          <label>Due Date</label>
                           <div className="quick-due-presets">
                             <button type="button" onClick={() => setDueDate(getFutureDate(date, 7))}>+7d</button>
                             <button type="button" onClick={() => setDueDate(getFutureDate(date, 14))}>+14d</button>

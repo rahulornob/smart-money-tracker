@@ -374,7 +374,7 @@ export function FinanceProvider({ children }) {
   // ----------------- DATA BACKUP & RESET -----------------
   const resetToDemoData = () => {
     const cleanState = {
-      currency: 'USD',
+      currency: 'BDT',
       theme: data.theme,
       accounts: [],
       categories: CATEGORIES,
