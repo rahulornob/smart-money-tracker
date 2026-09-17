@@ -83,6 +83,21 @@ export default function MobileNav({ activeTab, setActiveTab, onOpenNewTransactio
                   type="button"
                   onClick={() => {
                     setShowQuickActions(false);
+                    onOpenNewTransaction('transfer');
+                  }}
+                  className="mobile-quick-action-item quick-transfer"
+                  role="menuitem"
+                >
+                  <div className="mobile-quick-icon-box transfer">
+                    <IconArrowsExchange size={18} stroke={2} />
+                  </div>
+                  <span className="mobile-quick-label">Transfer</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowQuickActions(false);
                     onOpenNewTransaction('expense');
                   }}
                   className="mobile-quick-action-item quick-expense"
@@ -107,21 +122,6 @@ export default function MobileNav({ activeTab, setActiveTab, onOpenNewTransactio
                     <IconArrowUpRight size={18} stroke={2} />
                   </div>
                   <span className="mobile-quick-label">Income</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowQuickActions(false);
-                    onOpenNewTransaction('transfer');
-                  }}
-                  className="mobile-quick-action-item quick-transfer"
-                  role="menuitem"
-                >
-                  <div className="mobile-quick-icon-box transfer">
-                    <IconArrowsExchange size={18} stroke={2} />
-                  </div>
-                  <span className="mobile-quick-label">Transfer</span>
                 </button>
               </div>
             </div>

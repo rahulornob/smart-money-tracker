@@ -16,7 +16,7 @@ import {
 export default function TransactionModal({
   isOpen,
   onClose,
-  initialType = 'expense',
+  initialType = 'transfer',
   editTx = null,
 }) {
   const { shouldRender, isClosing } = useModalAnimation(isOpen);
@@ -237,8 +237,19 @@ export default function TransactionModal({
           </button>
         </div>
 
-        {/* Type Toggle Pills */}
+        {/* Type Toggle Pills: Transfer is 1st by default */}
         <div className="tx-type-selector">
+          <button
+            type="button"
+            onClick={() => {
+              setType('transfer');
+              setStatus('lent');
+            }}
+            className={`tx-type-btn transfer ${type === 'transfer' ? 'active' : ''}`}
+          >
+            <IconArrowsExchange size={16} stroke={1.8} />
+            <span>Transfer</span>
+          </button>
           <button
             type="button"
             onClick={() => {
@@ -260,17 +271,6 @@ export default function TransactionModal({
           >
             <IconArrowUpRight size={16} stroke={1.8} />
             <span>Income</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setType('transfer');
-              setStatus('lent');
-            }}
-            className={`tx-type-btn transfer ${type === 'transfer' ? 'active' : ''}`}
-          >
-            <IconArrowsExchange size={16} stroke={1.8} />
-            <span>Transfer</span>
           </button>
         </div>
 

@@ -70,7 +70,31 @@ export default function FloatingActionBar({ onOpenTransaction, isModalOpen }) {
   return (
     <div className="floating-action-bar-wrapper" role="region" aria-label="Quick Actions">
       <div className="floating-action-bar glass-panel-dock" ref={dockRef}>
-        {/* Action 1: Expense */}
+        {/* Action 1: Transfer */}
+        <button
+          type="button"
+          onClick={(e) => handleActionClick(e, 'transfer')}
+          onMouseEnter={() => setExpandedType('transfer')}
+          onMouseLeave={() => setExpandedType(null)}
+          className={`floating-dock-btn dock-transfer ${expandedType === 'transfer' ? 'is-expanded' : ''}`}
+          title="Transfer Money (T)"
+          aria-label="Transfer Money"
+        >
+          <div className="dock-icon-box">
+            <IconArrowsExchange size={17} stroke={2} />
+          </div>
+          <div className="dock-reveal-wrapper">
+            <div className="dock-reveal-inner">
+              <span className="dock-btn-label">Transfer</span>
+              <kbd className="dock-kbd-hint">T</kbd>
+            </div>
+          </div>
+        </button>
+
+        {/* Divider */}
+        <div className="dock-divider" aria-hidden="true" />
+
+        {/* Action 2: Expense */}
         <button
           type="button"
           onClick={(e) => handleActionClick(e, 'expense')}
@@ -94,7 +118,7 @@ export default function FloatingActionBar({ onOpenTransaction, isModalOpen }) {
         {/* Divider */}
         <div className="dock-divider" aria-hidden="true" />
 
-        {/* Action 2: Income */}
+        {/* Action 3: Income */}
         <button
           type="button"
           onClick={(e) => handleActionClick(e, 'income')}
@@ -111,30 +135,6 @@ export default function FloatingActionBar({ onOpenTransaction, isModalOpen }) {
             <div className="dock-reveal-inner">
               <span className="dock-btn-label">Income</span>
               <kbd className="dock-kbd-hint">I</kbd>
-            </div>
-          </div>
-        </button>
-
-        {/* Divider */}
-        <div className="dock-divider" aria-hidden="true" />
-
-        {/* Action 3: Transfer */}
-        <button
-          type="button"
-          onClick={(e) => handleActionClick(e, 'transfer')}
-          onMouseEnter={() => setExpandedType('transfer')}
-          onMouseLeave={() => setExpandedType(null)}
-          className={`floating-dock-btn dock-transfer ${expandedType === 'transfer' ? 'is-expanded' : ''}`}
-          title="Transfer Money (T)"
-          aria-label="Transfer Money"
-        >
-          <div className="dock-icon-box">
-            <IconArrowsExchange size={17} stroke={2} />
-          </div>
-          <div className="dock-reveal-wrapper">
-            <div className="dock-reveal-inner">
-              <span className="dock-btn-label">Transfer</span>
-              <kbd className="dock-kbd-hint">T</kbd>
             </div>
           </div>
         </button>

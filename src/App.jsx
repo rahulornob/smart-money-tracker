@@ -17,12 +17,12 @@ import FloatingActionBar from './components/common/FloatingActionBar';
 function WalletApp() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isTxModalOpen, setIsTxModalOpen] = useState(false);
-  const [txModalType, setTxModalType] = useState('expense');
+  const [txModalType, setTxModalType] = useState('transfer');
   const [editingTx, setEditingTx] = useState(null);
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [editingAccount, setEditingAccount] = useState(null);
 
-  const handleOpenNewTransaction = (type = 'expense') => {
+  const handleOpenNewTransaction = (type = 'transfer') => {
     setEditingTx(null);
     setTxModalType(type);
     setIsTxModalOpen(true);
@@ -48,7 +48,7 @@ function WalletApp() {
       <div className="main-content">
         <Header
           activeTab={activeTab}
-          onOpenTransactionModal={() => handleOpenNewTransaction('expense')}
+          onOpenTransactionModal={() => handleOpenNewTransaction('transfer')}
         />
 
         <main className="content-wrapper">
